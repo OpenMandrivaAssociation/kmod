@@ -104,6 +104,8 @@ make check
 %files
 %defattr(-,root,root)
 /bin/kmod
+%{_mandir}/man5/*
+%{_mandir}/man8/*
 
 %files -n %libname
 %defattr(-,root,root)
