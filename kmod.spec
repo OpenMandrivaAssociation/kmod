@@ -5,7 +5,7 @@
 
 Name:           kmod
 Summary:        Utilities to load modules into the kernel
-Version:        3
+Version:        4
 Release:        1
 License:        LGPLv2.1+ and GPLv2+
 Group:          System/Kernel and hardware
@@ -15,6 +15,7 @@ Requires:	%libname = %version-%release
 
 #Git-Clone:	git://git.profusion.mobi/kmod
 Source:         %name-%version.tar.xz
+Source1:	%name-%version.tar.sign
 
 %if 0%{?git_snapshot}
 BuildRequires:  autoconf automake libtool
