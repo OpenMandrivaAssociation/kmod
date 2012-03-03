@@ -10,8 +10,6 @@ License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
 
-Requires:	%{libname} = %{version}-%{release}
-
 Source0:	http://packages.profusion.mobi/kmod/%{name}-%{version}.tar.xz
 Source1:	http://packages.profusion.mobi/kmod/%{name}-%{version}.tar.sign
 
@@ -32,7 +30,6 @@ License:	GPLv2+
 Group:		System/Kernel and hardware
 Conflicts:	module-init-tools
 Requires:	%{name} = %{version}-%{release}
-Requires:	%{libname} = %{version}-%{release}
 
 %description	compat
 kmod is a set of tools to handle common tasks with Linux kernel
