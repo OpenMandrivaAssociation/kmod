@@ -29,7 +29,7 @@ Summary:	Compat symlinks for kernel module utilities
 License:	GPLv2+
 Group:		System/Kernel and hardware
 Conflicts:	module-init-tools
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{EVRD}
 
 %description	compat
 kmod is a set of tools to handle common tasks with Linux kernel
@@ -51,7 +51,7 @@ list modules, also checking its properties, dependencies and aliases.
 Summary:	Development files for libkmod
 Group:		Development/C
 License:	LGPLv2.1+
-Requires:	%{libname} = %{version}-%{release}
+Requires:	%{libname} = %{EVRD}
 
 %description -n	%{devname}
 libkmod was created to allow programs to easily insert, remove and
