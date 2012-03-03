@@ -1,10 +1,10 @@
-%define	major	1
+%define	major	2
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%mklibname %{name} -d
 
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
-Version:	4
+Version:	5
 Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
@@ -12,8 +12,8 @@ Url:		http://www.politreco.com/2011/12/announce-kmod-2/
 
 Requires:	%{libname} = %{version}-%{release}
 
-Source0:	%{name}-%{version}.tar.xz
-Source1:	%{name}-%{version}.tar.sign
+Source0:	http://packages.profusion.mobi/kmod/%{name}-%{version}.tar.xz
+Source1:	http://packages.profusion.mobi/kmod/%{name}-%{version}.tar.sign
 
 BuildRequires:	pkgconfig >= 0.23 pkgconfig(liblzma) pkgconfig(zlib) xz
 
