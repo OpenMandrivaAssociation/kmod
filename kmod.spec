@@ -5,7 +5,7 @@
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
 Version:	5
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
