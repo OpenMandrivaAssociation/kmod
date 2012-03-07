@@ -46,7 +46,7 @@ Group:          System/Libraries
 %description -n	%{libname}
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
-|
+
 %package -n	%{devname}
 Summary:	Development files for libkmod
 Group:		Development/C
