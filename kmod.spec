@@ -4,14 +4,14 @@
 
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
-Version:	5
-Release:	2
+Version:	7
+Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
-
-Source0:	http://packages.profusion.mobi/kmod/%{name}-%{version}.tar.xz
-Source1:	http://packages.profusion.mobi/kmod/%{name}-%{version}.tar.sign
+# See also: http://packages.profusion.mobi/kmod/
+Source0:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.xz
+Source1:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.sign
 
 BuildRequires:	pkgconfig >= 0.23 pkgconfig(liblzma) pkgconfig(zlib) xz
 
