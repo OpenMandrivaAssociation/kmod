@@ -47,9 +47,9 @@ dependencies and aliases.
 This package contains traditional name symlinks (lsmod, etc.)
 
 %package -n	%{libname}
-Summary:        Library to interact with Linux kernel modules
-License:        LGPLv2.1+
-Group:          System/Libraries
+Summary:	Library to interact with Linux kernel modules
+License:	LGPLv2.1+
+Group:		System/Libraries
 
 %description -n	%{libname}
 libkmod was created to allow programs to easily insert, remove and
