@@ -3,6 +3,7 @@
 %define	devname	%mklibname %{name} -d
 
 %bcond_without	dietlibc
+%bcond_without	uclibc
 
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
@@ -16,6 +17,9 @@ Source0:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.ta
 Source1:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.sign
 %if %{with dietlibc}
 BuildRequires:	dietlibc-devel
+%endif
+%if %{with uclibc}
+BuildRequires:	uClibc-devel
 %endif
 BuildRequires:	pkgconfig >= 0.23 pkgconfig(liblzma) pkgconfig(zlib) xz
 
@@ -73,6 +77,14 @@ make V=1 LD="diet ld" CC="diet cc" CFLAGS="-Os -D_BSD_SOURCE -D_FILE_OFFSET_BITS
 popd
 %endif
 
+%if %{with uclibc}
+mkdir uclibc
+pushd uclibc
+CC="%{uclibc_cc}" CFLAGS="%{uclibc_cflags}" ../configure --with-zlib --with-xz --enable-static --disable-shared --disable-tools
+make V=1
+popd
+%endif
+
 # The extra --includedir gives us the possibility to detect dependent
 # packages which fail to properly use pkgconfig.
 %configure	--with-xz \
@@ -98,6 +110,10 @@ done;
 install -m644 ./diet/libkmod/.libs/libkmod.a -D %{buildroot}%{_prefix}/lib/dietlibc/lib-%{_arch}/libkmod.a
 %endif
 
+%if %{with uclibc}
+install -m644 ./uclibc/libkmod/.libs/libkmod.a -D %{buildroot}%{_prefix}/uclibc/%{_libdir}/libkmod.a
+%endif
+
 %check
 make check
 
@@ -115,6 +131,9 @@ make check
 %{_libdir}/libkmod.so
 %if %{with dietlibc}
 %{_prefix}/lib/dietlibc/lib-%{_arch}/libkmod.a
+%endif
+%if %{with uclibc}
+%{_prefix}/uclibc/%{_libdir}/libkmod.a
 %endif
 
 %files compat
