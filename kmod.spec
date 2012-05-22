@@ -19,7 +19,7 @@ Source1:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.ta
 BuildRequires:	dietlibc-devel
 %endif
 %if %{with uclibc}
-BuildRequires:	uClibc-devel >= 0.9.33.2
+BuildRequires:	uClibc-devel >= 0.9.33.2-3
 %endif
 BuildRequires:	pkgconfig >= 0.23 pkgconfig(liblzma) pkgconfig(zlib) xz
 
