@@ -91,7 +91,9 @@ popd
 		--with-zlib \
 		--includedir=%{_includedir}/%{name}-%{version} \
 		--with-rootlibdir=/%{_lib} \
-		--bindir=/bin
+		--bindir=/bin \
+		--enable-shared \
+		--enable-static
 %make
 
 %install
@@ -129,6 +131,7 @@ make check
 %{_includedir}/*
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libkmod.so
+%{_libdir}/libkmod.a
 %if %{with dietlibc}
 %{_prefix}/lib/dietlibc/lib-%{_arch}/libkmod.a
 %endif
