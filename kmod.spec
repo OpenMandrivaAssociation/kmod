@@ -2,17 +2,21 @@
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%mklibname %{name} -d
 
+%bcond_without	dietlibc
+
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
 Version:	8
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
 # See also: http://packages.profusion.mobi/kmod/
 Source0:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.xz
 Source1:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.sign
-
+%if %{with dietlibc}
+BuildRequires:	dietlibc-devel
+%endif
 BuildRequires:	pkgconfig >= 0.23 pkgconfig(liblzma) pkgconfig(zlib) xz
 
 %description
@@ -61,6 +65,14 @@ list modules, also checking its properties, dependencies and aliases.
 %setup -q
 
 %build
+%if %{with dietlibc}
+mkdir diet
+pushd diet
+CC="diet gcc" ../configure --with-zlib --with-xz --enable-static --disable-shared --disable-tools
+make V=1 LD="diet ld" CC="diet cc" CFLAGS="-Os -D_BSD_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_ATFILE_SOURCE -DO_CLOEXEC=0 -g -DUINT16_MAX=65535 -DINT32_MAX=2147483647"
+popd
+%endif
+
 # The extra --includedir gives us the possibility to detect dependent
 # packages which fail to properly use pkgconfig.
 %configure	--with-xz \
@@ -82,6 +94,10 @@ for i in depmod insmod lsmod modinfo modprobe rmmod; do
 	ln -s /bin/kmod %{buildroot}/sbin/$i
 done;
 
+%if %{with dietlibc}
+install -m644 ./diet/libkmod/.libs/libkmod.a -D %{buildroot}%{_prefix}/lib/dietlibc/lib-%{_arch}/libkmod.a
+%endif
+
 %check
 make check
 
@@ -97,6 +113,9 @@ make check
 %{_includedir}/*
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libkmod.so
+%if %{with dietlibc}
+%{_prefix}/lib/dietlibc/lib-%{_arch}/libkmod.a
+%endif
 
 %files compat
 /bin/lsmod
