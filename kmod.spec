@@ -73,7 +73,7 @@ list modules, also checking its properties, dependencies and aliases.
 mkdir diet
 pushd diet
 CC="diet gcc" ../configure --with-zlib --with-xz --enable-static --disable-shared --disable-tools
-make V=1 LD="diet ld" CC="diet cc" CFLAGS="-Os -D_BSD_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_ATFILE_SOURCE -DO_CLOEXEC=0 -g -DUINT16_MAX=65535 -DINT32_MAX=2147483647"
+%make V=1 LD="diet ld" CC="diet cc" CFLAGS="-Os -D_BSD_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_ATFILE_SOURCE -DO_CLOEXEC=0 -g -DUINT16_MAX=65535 -DINT32_MAX=2147483647"
 popd
 %endif
 
@@ -81,7 +81,7 @@ popd
 mkdir uclibc
 pushd uclibc
 CC="%{uclibc_cc}" CFLAGS="%{uclibc_cflags}" ../configure --with-zlib --with-xz --enable-static --disable-shared --disable-tools
-make V=1
+%make V=1
 popd
 %endif
 
