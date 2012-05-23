@@ -60,6 +60,7 @@ Summary:	Development files for libkmod
 Group:		Development/C
 License:	LGPLv2.1+
 Requires:	%{libname} = %{EVRD}
+Provides:	kmod-devel = %{EVRD}
 
 %description -n	%{devname}
 libkmod was created to allow programs to easily insert, remove and
