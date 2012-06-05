@@ -8,7 +8,7 @@
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
 Version:	8
-Release:	3
+Release:	4
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -55,11 +55,25 @@ Group:		System/Libraries
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 
+%if %{with uclibc}
+%package -n	uclibc-%{libname}
+Summary:	Library to interact with Linux kernel modules
+License:	LGPLv2.1+
+Group:		System/Libraries
+
+%description -n	uclibc-%{libname}
+libkmod was created to allow programs to easily insert, remove and
+list modules, also checking its properties, dependencies and aliases.
+%endif
+
 %package -n	%{devname}
 Summary:	Development files for libkmod
 Group:		Development/C
 License:	LGPLv2.1+
 Requires:	%{libname} = %{EVRD}
+%if %{with uclibc}
+Requires:	uclibc-%{libname} = %{EVRD}
+%endif
 Provides:	kmod-devel = %{EVRD}
 
 %description -n	%{devname}
@@ -70,22 +84,44 @@ list modules, also checking its properties, dependencies and aliases.
 %setup -q
 
 %build
+export CONFIGURE_TOP=..
 %if %{with dietlibc}
-mkdir diet
+mkdir -p diet
 pushd diet
-CC="diet gcc" ../configure --with-zlib --with-xz --enable-static --disable-shared --disable-tools
-%make V=1 LD="diet ld" CC="diet cc" CFLAGS="-Os -D_BSD_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_ATFILE_SOURCE -DO_CLOEXEC=0 -g -DUINT16_MAX=65535 -DINT32_MAX=2147483647"
+CFLAGS="%{optflags} -fno-stack-protector -Os -D_BSD_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_ATFILE_SOURCE -DO_CLOEXEC=0" \
+%configure2_5x	--prefix=%{_prefix}/lib/dietlibc \
+		--with-xz \
+		--with-zlib \
+		--with-rootlibdir=%{_prefix}/lib/dietlibc/lib-%{_arch} \
+		--enable-static \
+		--disable-shared \
+		--disable-tools \
+		--disable-silent-rules \
+		CC="diet gcc" \
+		LD="diet ld"
+%make
 popd
 %endif
 
 %if %{with uclibc}
-mkdir uclibc
+mkdir -p uclibc
 pushd uclibc
-CC="%{uclibc_cc}" CFLAGS="%{uclibc_cflags}" ../configure --with-zlib --with-xz --enable-static --disable-shared --disable-tools
+CFLAGS="%{uclibc_cflags}" \
+%configure2_5x	--prefix=%{uclibc_root} \
+		--with-xz \
+		--with-zlib \
+		--with-rootlibdir=%{uclibc_root}/%{_lib} \
+		--enable-static \
+		--enable-shared \
+		--disable-tools \
+		--disable-silent-rules \
+		CC=%{uclibc_cc}
 %make V=1
 popd
 %endif
 
+mkdir -p glibc
+pushd glibc
 # The extra --includedir gives us the possibility to detect dependent
 # packages which fail to properly use pkgconfig.
 %configure	--with-xz \
@@ -94,11 +130,19 @@ popd
 		--with-rootlibdir=/%{_lib} \
 		--bindir=/bin \
 		--enable-shared \
-		--enable-static
+		--enable-static \
+		--disable-silent-rules
 %make
+popd
 
 %install
-%makeinstall_std
+%if %{with uclibc}
+%makeinstall_std -C uclibc
+%endif
+%if %{with dietlibc}
+%makeinstall_std -C uclibc
+%endif
+%makeinstall_std -C glibc
 # Remove standalone tools
 rm -f %{buildroot}/bin/kmod-*
 
@@ -118,7 +162,7 @@ install -m644 ./uclibc/libkmod/.libs/libkmod.a -D %{buildroot}%{_prefix}/uclibc/
 %endif
 
 %check
-make check
+make -C glibc check
 
 %files
 /bin/kmod
@@ -127,6 +171,11 @@ make check
 
 %files -n %{libname}
 /%{_lib}/libkmod.so.%{major}*
+
+%if %{with uclibc}
+%files -n uclibc-%{libname}
+%{uclibc_root}/%{_lib}/libkmod.so.%{major}*
+%endif
 
 %files -n %{devname}
 %{_includedir}/*
