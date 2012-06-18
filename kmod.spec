@@ -8,7 +8,7 @@
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
 Version:	8
-Release:	5
+Release:	6
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -90,8 +90,8 @@ mkdir -p diet
 pushd diet
 CFLAGS="%{optflags} -fno-stack-protector -Os -D_BSD_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_ATFILE_SOURCE -DO_CLOEXEC=0" \
 %configure2_5x	--prefix=%{_prefix}/lib/dietlibc \
-		--with-xz \
-		--with-zlib \
+		--without-xz \
+		--without-zlib \
 		--with-rootlibdir=%{_prefix}/lib/dietlibc/lib-%{_arch} \
 		--enable-static \
 		--disable-shared \
@@ -108,8 +108,8 @@ mkdir -p uclibc
 pushd uclibc
 CFLAGS="%{uclibc_cflags}" \
 %configure2_5x	--prefix=%{uclibc_root} \
-		--with-xz \
-		--with-zlib \
+		--without-xz \
+		--without-zlib \
 		--with-rootlibdir=%{uclibc_root}/%{_lib} \
 		--enable-static \
 		--enable-shared \
