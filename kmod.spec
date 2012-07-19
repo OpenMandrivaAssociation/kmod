@@ -2,6 +2,10 @@
 %define	libname	%mklibname %{name} %{major}
 %define	devname	%mklibname %{name} -d
 
+# (tpg) this is important
+# keep this synchronized with module-init-tools-ver-rel+1
+%define module_ver 3.16-4
+
 %bcond_without	dietlibc
 %bcond_without	uclibc
 
@@ -15,13 +19,24 @@ Url:		http://www.politreco.com/2011/12/announce-kmod-2/
 # See also: http://packages.profusion.mobi/kmod/
 Source0:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.xz
 Source1:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.sign
+
+# (tpg) provide config files from module-init-tools
+Source2:	modprobe.default
+Source3:	modprobe.preload
+Source4:	blacklist-mdv.conf
+Source5:	ipw-no-associate.conf
+Source6:	blacklist-compat.conf
+
 %if %{with dietlibc}
 BuildRequires:	dietlibc-devel
 %endif
 %if %{with uclibc}
 BuildRequires:	uClibc-devel >= 0.9.33.2-5
 %endif
-BuildRequires:	pkgconfig >= 0.23 pkgconfig(liblzma) pkgconfig(zlib) xz
+BuildRequires:	pkgconfig >= 0.23
+BuildRequires:	pkgconfig(liblzma)
+BuildRequires:	pkgconfig(zlib)
+BuildRequires:	xz
 
 %description
 kmod is a set of tools to handle common tasks with Linux kernel
@@ -32,41 +47,43 @@ These tools are designed on top of libkmod, a library that is shipped
 with kmod. The aim is to be compatible with tools, configurations and
 indexes from module-init-tools project.
 
-%package	compat
+%package compat
 Summary:	Compat symlinks for kernel module utilities
 License:	GPLv2+
 Group:		System/Kernel and hardware
-Conflicts:	module-init-tools
+# (tpg) this is important
+Conflicts:	module-init-tools < %{module_ver}
+Provides:	module-init-tools = %{module_ver}
 Requires:	%{name} = %{EVRD}
 
-%description	compat
+%description compat
 kmod is a set of tools to handle common tasks with Linux kernel
 modules like insert, remove, list, check properties, resolve
 dependencies and aliases.
 
 This package contains traditional name symlinks (lsmod, etc.)
 
-%package -n	%{libname}
+%package -n %{libname}
 Summary:	Library to interact with Linux kernel modules
 License:	LGPLv2.1+
 Group:		System/Libraries
 
-%description -n	%{libname}
+%description -n %{libname}
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 
 %if %{with uclibc}
-%package -n	uclibc-%{libname}
+%package -n uclibc-%{libname}
 Summary:	Library to interact with Linux kernel modules
 License:	LGPLv2.1+
 Group:		System/Libraries
 
-%description -n	uclibc-%{libname}
+%description -n uclibc-%{libname}
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 %endif
 
-%package -n	%{devname}
+%package -n %{devname}
 Summary:	Development files for libkmod
 Group:		Development/C
 License:	LGPLv2.1+
@@ -76,7 +93,7 @@ Requires:	uclibc-%{libname} = %{EVRD}
 %endif
 Provides:	kmod-devel = %{EVRD}
 
-%description -n	%{devname}
+%description -n %{devname}
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 
@@ -124,7 +141,7 @@ mkdir -p glibc
 pushd glibc
 # The extra --includedir gives us the possibility to detect dependent
 # packages which fail to properly use pkgconfig.
-%configure	--with-xz \
+%configure2_5x	--with-xz \
 		--with-zlib \
 		--includedir=%{_includedir}/%{name}-%{version} \
 		--with-rootlibdir=/%{_lib} \
@@ -139,12 +156,27 @@ popd
 %if %{with uclibc}
 %makeinstall_std -C uclibc
 %endif
+
 %if %{with dietlibc}
 %makeinstall_std -C uclibc
 %endif
+
 %makeinstall_std -C glibc
 # Remove standalone tools
 rm -f %{buildroot}/bin/kmod-*
+rm -f %{buildroot}%{_libdir}/libkmod.la
+
+# (tpg) install config files
+install -d -m755 %{buildroot}%{_sysconfdir}
+install -d -m755 %{buildroot}%{_sysconfdir}/depmod.d
+install -d -m755 %{buildroot}%{_sysconfdir}/modprobe.d/
+install -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/modprobe.d/00_modprobe.conf
+install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}
+install -m 644 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_sysconfdir}/modprobe.d
+touch %{buildroot}%{_sysconfdir}/modprobe.conf
+
+# (tpg) we still use this
+ln -s ../modprobe.conf %{buildroot}%{_sysconfdir}/modprobe.d/01_mandriva.conf
 
 # kmod-compat
 mkdir -p %{buildroot}/{bin,sbin}
@@ -190,5 +222,10 @@ make -C glibc check
 %endif
 
 %files compat
+%dir %{_sysconfdir}/modprobe.d/
+%dir %{_sysconfdir}/depmod.d/
+%config(noreplace) %{_sysconfdir}/modprobe.preload
+%config(noreplace) %{_sysconfdir}/modprobe.conf
+%config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 /bin/lsmod
 /sbin/*
