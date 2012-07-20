@@ -12,7 +12,7 @@
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
 Version:	9
-Release:	4
+Release:	5
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -67,7 +67,8 @@ This package contains traditional name symlinks (lsmod, etc.)
 Summary:	Library to interact with Linux kernel modules
 License:	LGPLv2.1+
 Group:		System/Libraries
-Requires:	%{name}-compat = %{EVRD}
+# (tpg) do not require this until initscripts won't be fixed
+#Requires:	%{name}-compat = %{EVRD}
 Conflicts:	%{mklibname modprobe 0} <= 3.6-18
 Conflicts:	%{mklibname modprobe 1} < %{module_ver}
 
