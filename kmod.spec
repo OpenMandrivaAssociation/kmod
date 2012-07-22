@@ -12,7 +12,7 @@
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
 Version:	9
-Release:	5
+Release:	6
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -173,7 +173,8 @@ rm -f %{buildroot}%{_libdir}/libkmod.la
 # (tpg) install config files
 install -d -m755 %{buildroot}%{_sysconfdir}
 install -d -m755 %{buildroot}%{_sysconfdir}/depmod.d
-install -d -m755 %{buildroot}%{_sysconfdir}/modprobe.d/
+install -d -m755 %{buildroot}%{_sysconfdir}/modprobe.d
+install -d -m755 %{buildroot}/lib/modprobe.d
 install -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/modprobe.d/00_modprobe.conf
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}
 install -m 644 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_sysconfdir}/modprobe.d
@@ -229,8 +230,9 @@ install -m644 ./uclibc/libkmod/.libs/libkmod.a -D %{buildroot}%{_prefix}/uclibc/
 %endif
 
 %files compat
-%dir %{_sysconfdir}/modprobe.d/
-%dir %{_sysconfdir}/depmod.d/
+%dir %{_sysconfdir}/modprobe.d
+%dir %{_sysconfdir}/depmod.d
+%dir /lib/modprobe.d
 %config(noreplace) %{_sysconfdir}/modprobe.preload
 %config(noreplace) %{_sysconfdir}/modprobe.conf
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
