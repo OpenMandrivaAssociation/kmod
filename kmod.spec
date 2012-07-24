@@ -4,7 +4,7 @@
 
 # (tpg) this is important
 # keep this synchronized with module-init-tools-ver-rel+1
-%define module_ver 3.16-4
+%define module_ver 3.17-1
 
 %bcond_without	dietlibc
 %bcond_without	uclibc
@@ -12,7 +12,7 @@
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
 Version:	9
-Release:	6
+Release:	7
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -51,8 +51,7 @@ indexes from module-init-tools project.
 Summary:	Compat symlinks for kernel module utilities
 License:	GPLv2+
 Group:		System/Kernel and hardware
-# (tpg) this is important
-Conflicts:	module-init-tools < %{module_ver}
+Obsoletes:	module-init-tools < %{module_ver}
 Provides:	module-init-tools = %{module_ver}
 Requires:	%{name} = %{EVRD}
 
