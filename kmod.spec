@@ -12,7 +12,7 @@
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
 Version:	9
-Release:	7
+Release:	8
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -126,7 +126,8 @@ popd
 %if %{with uclibc}
 mkdir -p uclibc
 pushd uclibc
-CFLAGS="%{uclibc_cflags}" \
+CFLAGS="%{uclibc_cflags} -flto" \
+LDFLAGS="%{ldflags} -Wl,-O2 -flto" \
 %configure2_5x	--prefix=%{uclibc_root} \
 		--without-xz \
 		--without-zlib \
