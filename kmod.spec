@@ -11,8 +11,8 @@
 
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
-Version:	11
-Release:	1
+Version:	10
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -159,10 +159,13 @@ popd
 %install
 %if %{with uclibc}
 %makeinstall_std -C uclibc
+install -m644 ./uclibc/libkmod/.libs/libkmod.a -D %{buildroot}%{uclibc_root}%{_libdir}/libkmod.a
+ln -rsf %{buildroot}%{uclibc_root}/%{_lib}/libkmod.so.%{major}.* %{buildroot}%{uclibc_root}%{_libdir}/libkmod.so
 %endif
 
 %if %{with dietlibc}
-%makeinstall_std -C diet
+install -m644 ./diet/libkmod/.libs/libkmod.a -D %{buildroot}%{_prefix}/lib/dietlibc/lib-%{_arch}/libkmod.a
+#%makeinstall_std -C diet
 %endif
 
 %makeinstall_std -C glibc
@@ -189,14 +192,6 @@ ln -s kmod %{buildroot}/bin/lsmod
 for i in depmod insmod lsmod modinfo modprobe rmmod; do
 	ln -s /bin/kmod %{buildroot}/sbin/$i
 done;
-
-%if %{with dietlibc}
-install -m644 ./diet/libkmod/.libs/libkmod.a -D %{buildroot}%{_prefix}/lib/dietlibc/lib-%{_arch}/libkmod.a
-%endif
-
-%if %{with uclibc}
-install -m644 ./uclibc/libkmod/.libs/libkmod.a -D %{buildroot}%{_prefix}/uclibc/%{_libdir}/libkmod.a
-%endif
 
 %check
 # (tpg) disable check for now
@@ -226,7 +221,8 @@ install -m644 ./uclibc/libkmod/.libs/libkmod.a -D %{buildroot}%{_prefix}/uclibc/
 %{_prefix}/lib/dietlibc/lib-%{_arch}/libkmod.a
 %endif
 %if %{with uclibc}
-%{_prefix}/uclibc/%{_libdir}/libkmod.a
+%{uclibc_root}%{_libdir}/libkmod.a
+%{uclibc_root}%{_libdir}/libkmod.so
 %endif
 
 %files compat
