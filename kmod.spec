@@ -11,7 +11,7 @@
 
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
-Version:	10
+Version:	11
 Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
@@ -47,7 +47,7 @@ These tools are designed on top of libkmod, a library that is shipped
 with kmod. The aim is to be compatible with tools, configurations and
 indexes from module-init-tools project.
 
-%package compat
+%package	compat
 Summary:	Compat symlinks for kernel module utilities
 License:	GPLv2+
 Group:		System/Kernel and hardware
@@ -62,7 +62,7 @@ dependencies and aliases.
 
 This package contains traditional name symlinks (lsmod, etc.)
 
-%package -n %{libname}
+%package -n	%{libname}
 Summary:	Library to interact with Linux kernel modules
 License:	LGPLv2.1+
 Group:		System/Libraries
@@ -76,17 +76,17 @@ libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 
 %if %{with uclibc}
-%package -n uclibc-%{libname}
+%package -n	uclibc-%{libname}
 Summary:	Library to interact with Linux kernel modules
 License:	LGPLv2.1+
 Group:		System/Libraries
 
-%description -n uclibc-%{libname}
+%description -n	uclibc-%{libname}
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 %endif
 
-%package -n %{devname}
+%package -n	%{devname}
 Summary:	Development files for libkmod
 Group:		Development/C
 License:	LGPLv2.1+
@@ -96,7 +96,7 @@ Requires:	uclibc-%{libname} = %{EVRD}
 %endif
 Provides:	kmod-devel = %{EVRD}
 
-%description -n %{devname}
+%description -n	%{devname}
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 
