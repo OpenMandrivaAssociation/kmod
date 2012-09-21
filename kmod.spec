@@ -162,7 +162,7 @@ popd
 %endif
 
 %if %{with dietlibc}
-%makeinstall_std -C uclibc
+%makeinstall_std -C diet
 %endif
 
 %makeinstall_std -C glibc
