@@ -12,7 +12,7 @@
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
 Version:	10
-Release:	2
+Release:	3
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -31,7 +31,7 @@ Source6:	blacklist-compat.conf
 BuildRequires:	dietlibc-devel
 %endif
 %if %{with uclibc}
-BuildRequires:	uClibc-devel >= 0.9.33.2-5
+BuildRequires:	uClibc-devel >= 0.9.33.2-9
 %endif
 BuildRequires:	pkgconfig >= 0.23
 BuildRequires:	pkgconfig(liblzma)
