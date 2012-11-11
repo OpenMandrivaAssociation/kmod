@@ -1,0 +1,8 @@
+sources:
+  "blacklist-compat.conf:"	1012086c5c1e5858c24acbb4d2cac09391c3a3b2
+  "blacklist-mdv.conf:"	55830cc8318746ba412641dc2971e970996a5427
+  "ipw-no-associate.conf:"	d48eb435fa2bd5388c6044863964edd0238d9ccd
+  "kmod-10.tar.sign:"	1b52b1cf93e25b549f94dcf284373214da74aab9
+  "kmod-10.tar.xz:"	6da4fa76fc5a4feed7926663587d9d41b0412d97
+  "modprobe.default:"	9da9691c5e2357d86b82cd1add350b3b4af24ebb
+  "modprobe.preload:"	703e611b52805d531b8d9ea569c601480a46c9ec
