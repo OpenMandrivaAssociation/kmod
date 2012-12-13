@@ -129,8 +129,8 @@ pushd uclibc
 CFLAGS="%{uclibc_cflags} -flto" \
 LDFLAGS="%{ldflags} -Wl,-O2 -flto" \
 %configure2_5x	--prefix=%{uclibc_root} \
-		--without-xz \
-		--without-zlib \
+		--with-xz \
+		--with-zlib \
 		--with-rootlibdir=%{uclibc_root}/%{_lib} \
 		--enable-static \
 		--enable-shared \
