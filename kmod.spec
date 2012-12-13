@@ -47,7 +47,7 @@ These tools are designed on top of libkmod, a library that is shipped
 with kmod. The aim is to be compatible with tools, configurations and
 indexes from module-init-tools project.
 
-%package compat
+%package	compat
 Summary:	Compat symlinks for kernel module utilities
 License:	GPLv2+
 Group:		System/Kernel and hardware
@@ -55,14 +55,14 @@ Obsoletes:	module-init-tools < %{module_ver}
 Provides:	module-init-tools = %{module_ver}
 Requires:	%{name} = %{EVRD}
 
-%description compat
+%description	compat
 kmod is a set of tools to handle common tasks with Linux kernel
 modules like insert, remove, list, check properties, resolve
 dependencies and aliases.
 
 This package contains traditional name symlinks (lsmod, etc.)
 
-%package -n %{libname}
+%package -n	%{libname}
 Summary:	Library to interact with Linux kernel modules
 License:	LGPLv2.1+
 Group:		System/Libraries
@@ -71,12 +71,12 @@ Group:		System/Libraries
 Conflicts:	%{mklibname modprobe 0} <= 3.6-18
 Conflicts:	%{mklibname modprobe 1} < %{module_ver}
 
-%description -n %{libname}
+%description -n	%{libname}
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 
 %if %{with uclibc}
-%package -n uclibc-%{libname}
+%package -n	uclibc-%{libname}
 Summary:	Library to interact with Linux kernel modules
 License:	LGPLv2.1+
 Group:		System/Libraries
@@ -86,7 +86,7 @@ libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 %endif
 
-%package -n %{devname}
+%package -n	%{devname}
 Summary:	Development files for libkmod
 Group:		Development/C
 License:	LGPLv2.1+
