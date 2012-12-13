@@ -35,6 +35,7 @@ BuildRequires:	uClibc-devel >= 0.9.33.2-15
 %endif
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
+BuildRequires:	xsltproc
 
 %description
 kmod is a set of tools to handle common tasks with Linux kernel
