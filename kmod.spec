@@ -187,9 +187,7 @@ for i in depmod insmod lsmod modinfo modprobe rmmod; do
 done;
 
 %check
-# (tpg) disable check for now
-# it fails only on ix56
-#make -C glibc check
+make -C glibc check
 
 
 %files
