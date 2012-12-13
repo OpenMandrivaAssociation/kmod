@@ -116,7 +116,6 @@ CFLAGS="%{optflags} -fno-stack-protector -Os -D_BSD_SOURCE -D_FILE_OFFSET_BITS=6
 		--enable-static \
 		--disable-shared \
 		--disable-tools \
-		--disable-silent-rules \
 		CC="diet gcc" \
 		LD="diet ld"
 %make
@@ -126,17 +125,13 @@ popd
 %if %{with uclibc}
 mkdir -p uclibc
 pushd uclibc
-CFLAGS="%{uclibc_cflags} -flto" \
-LDFLAGS="%{ldflags} -Wl,-O2 -flto" \
-%configure2_5x	--prefix=%{uclibc_root} \
+%uclibc_configure \
 		--with-xz \
 		--with-zlib \
 		--with-rootlibdir=%{uclibc_root}/%{_lib} \
 		--enable-static \
 		--enable-shared \
-		--disable-tools \
-		--disable-silent-rules \
-		CC=%{uclibc_cc}
+		--disable-tools
 %make V=1
 popd
 %endif
@@ -151,16 +146,15 @@ pushd glibc
 		--with-rootlibdir=/%{_lib} \
 		--bindir=/bin \
 		--enable-shared \
-		--enable-static \
-		--disable-silent-rules
+		--enable-static
 %make
 popd
 
 %install
 %if %{with uclibc}
 %makeinstall_std -C uclibc
-install -m644 ./uclibc/libkmod/.libs/libkmod.a -D %{buildroot}%{uclibc_root}%{_libdir}/libkmod.a
 ln -rsf %{buildroot}%{uclibc_root}/%{_lib}/libkmod.so.%{major}.* %{buildroot}%{uclibc_root}%{_libdir}/libkmod.so
+rm -r %{buildroot}%{uclibc_root}%{_libdir}/pkgconfig/
 %endif
 
 %if %{with dietlibc}
