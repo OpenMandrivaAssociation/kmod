@@ -12,7 +12,7 @@
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
 Version:	12
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -152,7 +152,8 @@ popd
 %install
 %if %{with uclibc}
 %makeinstall_std -C uclibc
-ln -rsf %{buildroot}%{uclibc_root}/%{_lib}/libkmod.so.%{major}.* %{buildroot}%{uclibc_root}%{_libdir}/libkmod.so
+rm %{buildroot}%{uclibc_root}%{_libdir}/libkmod.so
+ln -rs %{buildroot}%{uclibc_root}/%{_lib}/libkmod.so.%{major}.* %{buildroot}%{uclibc_root}%{_libdir}/libkmod.so
 rm -r %{buildroot}%{uclibc_root}%{_libdir}/pkgconfig/
 %endif
 
