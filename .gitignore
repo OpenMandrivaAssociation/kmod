@@ -1,7 +1,2 @@
-blacklist-compat.conf
-blacklist-mdv.conf
-ipw-no-associate.conf
 kmod-10.tar.sign
 kmod-10.tar.xz
-modprobe.default
-modprobe.preload
