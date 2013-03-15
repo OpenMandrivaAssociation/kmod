@@ -145,7 +145,10 @@ pushd glibc
 		--with-rootlibdir=/%{_lib} \
 		--bindir=/bin \
 		--enable-shared \
-		--enable-static
+		--enable-static \
+		--enable-gtk-doc \
+		--enable-gtk-doc-html \
+		--with-html-dir=%{_docdir}/%{name}/html
 %make
 popd
 
@@ -205,6 +208,7 @@ make -C glibc check
 %endif
 
 %files -n %{devname}
+%doc %{_docdir}/%{name}
 %{_includedir}/*
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libkmod.so
