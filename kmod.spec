@@ -191,6 +191,8 @@ for i in depmod insmod lsmod modinfo modprobe rmmod; do
 done;
 
 %check
+# make check suddenly seems to fail copy this directory from srcdir...
+[ ! -d glibc/testsuite ] && cp -a testsuite glibc
 make -C glibc check
 
 
