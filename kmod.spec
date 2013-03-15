@@ -35,6 +35,8 @@ BuildRequires:	uClibc-devel >= 0.9.33.2-15
 %endif
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
+BuildRequires:	pkgconfig(gobject-2.0)
+BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	xsltproc
 BuildRequires:	gtk-doc
 
