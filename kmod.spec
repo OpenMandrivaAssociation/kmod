@@ -9,8 +9,8 @@
 %bcond_without	dietlibc
 %bcond_without	uclibc
 
-Name:		kmod
 Summary:	Utilities to load modules into the kernel
+Name:		kmod
 Version:	13
 Release:	1
 License:	LGPLv2.1+ and GPLv2+
@@ -19,7 +19,6 @@ Url:		http://www.politreco.com/2011/12/announce-kmod-2/
 # See also: http://packages.profusion.mobi/kmod/
 Source0:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.xz
 Source1:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.sign
-
 # (tpg) provide config files from module-init-tools
 Source2:	modprobe.default
 Source3:	modprobe.preload
@@ -33,13 +32,12 @@ BuildRequires:	dietlibc-devel
 %if %{with uclibc}
 BuildRequires:	uClibc-devel >= 0.9.33.2-15
 %endif
+BuildRequires:	gtk-doc
+BuildRequires:	xsltproc
+BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(gobject-2.0)
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
-BuildRequires:	pkgconfig(gobject-2.0)
-BuildRequires:	pkgconfig(glib-2.0)
-BuildRequires:	xsltproc
-BuildRequires:	gtk-doc
-
 
 %description
 kmod is a set of tools to handle common tasks with Linux kernel
@@ -97,7 +95,7 @@ Requires:	%{libname} = %{EVRD}
 %if %{with uclibc}
 Requires:	uclibc-%{libname} = %{EVRD}
 %endif
-Provides:	kmod-devel = %{EVRD}
+Provides:	%{name}-devel = %{EVRD}
 
 %description -n	%{devname}
 libkmod was created to allow programs to easily insert, remove and
@@ -112,15 +110,16 @@ export CONFIGURE_TOP=..
 mkdir -p diet
 pushd diet
 CFLAGS="%{optflags} -fno-stack-protector -Os -D_BSD_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_ATFILE_SOURCE -DO_CLOEXEC=0" \
-%configure2_5x	--prefix=%{_prefix}/lib/dietlibc \
-		--without-xz \
-		--without-zlib \
-		--with-rootlibdir=%{_prefix}/lib/dietlibc/lib-%{_arch} \
-		--enable-static \
-		--disable-shared \
-		--disable-tools \
-		CC="diet gcc" \
-		LD="diet ld"
+%configure2_5x \
+	--prefix=%{_prefix}/lib/dietlibc \
+	--without-xz \
+	--without-zlib \
+	--with-rootlibdir=%{_prefix}/lib/dietlibc/lib-%{_arch} \
+	--enable-static \
+	--disable-shared \
+	--disable-tools \
+	CC="diet gcc" \
+	LD="diet ld"
 %make
 popd
 %endif
@@ -129,12 +128,12 @@ popd
 mkdir -p uclibc
 pushd uclibc
 %uclibc_configure \
-		--with-xz \
-		--with-zlib \
-		--with-rootlibdir=%{uclibc_root}/%{_lib} \
-		--enable-static \
-		--enable-shared \
-		--disable-tools
+	--with-xz \
+	--with-zlib \
+	--with-rootlibdir=%{uclibc_root}/%{_lib} \
+	--enable-static \
+	--enable-shared \
+	--disable-tools
 %make V=1
 popd
 %endif
@@ -143,16 +142,17 @@ mkdir -p glibc
 pushd glibc
 # The extra --includedir gives us the possibility to detect dependent
 # packages which fail to properly use pkgconfig.
-%configure2_5x	--with-xz \
-		--with-zlib \
-		--includedir=%{_includedir}/%{name}-%{version} \
-		--with-rootlibdir=/%{_lib} \
-		--bindir=/bin \
-		--enable-shared \
-		--enable-static \
-		--enable-gtk-doc \
-		--enable-gtk-doc-html \
-		--with-html-dir=%{_docdir}/%{name}/html
+%configure2_5x \
+	--with-xz \
+	--with-zlib \
+	--includedir=%{_includedir}/%{name}-%{version} \
+	--with-rootlibdir=/%{_lib} \
+	--bindir=/bin \
+	--enable-shared \
+	--enable-static \
+	--enable-gtk-doc \
+	--enable-gtk-doc-html \
+	--with-html-dir=%{_docdir}/%{name}/html
 %make
 popd
 
@@ -236,3 +236,4 @@ make -C glibc check
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 /bin/lsmod
 /sbin/*
+
