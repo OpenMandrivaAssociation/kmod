@@ -12,7 +12,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	13
-Release:	2
+Release:	3
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -92,6 +92,7 @@ Summary:	Development files for libkmod
 Group:		Development/C
 License:	LGPLv2.1+
 Requires:	%{libname} = %{EVRD}
+Requires:	%{name}-compat = %{EVRD}
 %if %{with uclibc}
 Requires:	uclibc-%{libname} = %{EVRD}
 %endif
