@@ -12,7 +12,7 @@
 Name:		kmod
 Summary:	Utilities to load modules into the kernel
 Version:	13
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -79,8 +79,21 @@ libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 
 %if %{with uclibc}
+%package -n	uclibc-%{name}
+Summary:	Utilities to load modules into the kernel (uClibc build)
+Group:		System/Kernel and hardware
+
+%description -n	uclibc-%{name}
+kmod is a set of tools to handle common tasks with Linux kernel
+modules like insert, remove, list, check properties, resolve
+dependencies and aliases.
+
+These tools are designed on top of libkmod, a library that is shipped
+with kmod. The aim is to be compatible with tools, configurations and
+indexes from module-init-tools project.
+
 %package -n	uclibc-%{libname}
-Summary:	Library to interact with Linux kernel modules
+Summary:	Library to interact with Linux kernel modules (uClibc build)
 License:	LGPLv2.1+
 Group:		System/Libraries
 
@@ -107,7 +120,7 @@ list modules, also checking its properties, dependencies and aliases.
 %setup -q
 
 %build
-export CONFIGURE_TOP=..
+export CONFIGURE_TOP="$PWD"
 %if %{with dietlibc}
 mkdir -p diet
 pushd diet
@@ -132,9 +145,10 @@ pushd uclibc
 		--with-xz \
 		--with-zlib \
 		--with-rootlibdir=%{uclibc_root}/%{_lib} \
+		--bindir=%{uclibc_root}/bin \
 		--enable-static \
 		--enable-shared \
-		--disable-tools
+		--enable-tools
 %make V=1
 popd
 %endif
@@ -162,6 +176,13 @@ popd
 rm %{buildroot}%{uclibc_root}%{_libdir}/libkmod.so
 ln -rs %{buildroot}%{uclibc_root}/%{_lib}/libkmod.so.%{major}.* %{buildroot}%{uclibc_root}%{_libdir}/libkmod.so
 rm -r %{buildroot}%{uclibc_root}%{_libdir}/pkgconfig/
+mkdir -p %{buildroot}/{bin,sbin}
+ln -s kmod %{buildroot}%{uclibc_root}/bin/lsmod
+install -d %{buildroot}%{uclibc_root}/sbin
+for i in depmod insmod lsmod modinfo modprobe rmmod; do
+	ln -sr %{buildroot}%{uclibc_root}/bin/kmod %{buildroot}%{uclibc_root}/sbin/$i
+done;
+
 %endif
 
 %if %{with dietlibc}
@@ -209,6 +230,10 @@ make -C glibc check
 /%{_lib}/libkmod.so.%{major}*
 
 %if %{with uclibc}
+%files -n uclibc-%{name}
+%{uclibc_root}/bin/*
+%{uclibc_root}/sbin/*
+
 %files -n uclibc-%{libname}
 %{uclibc_root}/%{_lib}/libkmod.so.%{major}*
 %endif
