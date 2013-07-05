@@ -6,19 +6,18 @@
 # keep this synchronized with module-init-tools-ver-rel+1
 %define module_ver 3.17-1
 
-%bcond_without	dietlibc
 %bcond_without	uclibc
 
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
-Version:	13
+Version:	14
 Release:	4
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
 # See also: http://packages.profusion.mobi/kmod/
-Source0:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.xz
-Source1:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.sign
+Source0:	https://www.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.xz
+Source1:	https://www.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.sign
 # (tpg) provide config files from module-init-tools
 Source2:	modprobe.default
 Source3:	modprobe.preload
@@ -26,9 +25,6 @@ Source4:	blacklist-mdv.conf
 Source5:	ipw-no-associate.conf
 Source6:	blacklist-compat.conf
 
-%if %{with dietlibc}
-BuildRequires:	dietlibc-devel
-%endif
 %if %{with uclibc}
 BuildRequires:	uClibc-devel >= 0.9.33.2-15
 %endif
@@ -122,24 +118,6 @@ list modules, also checking its properties, dependencies and aliases.
 export CONFIGURE_TOP="$PWD"
 %global optflags %{optflags} -Os
 
-%if %{with dietlibc}
-mkdir -p diet
-pushd diet
-CFLAGS="%{optflags} -fno-stack-protector -Os -D_BSD_SOURCE -D_FILE_OFFSET_BITS=64 -D_GNU_SOURCE -D_ATFILE_SOURCE -DO_CLOEXEC=0" \
-%configure2_5x \
-	--prefix=%{_prefix}/lib/dietlibc \
-	--without-xz \
-	--without-zlib \
-	--with-rootlibdir=%{_prefix}/lib/dietlibc/lib-%{_arch} \
-	--enable-static \
-	--disable-shared \
-	--disable-tools \
-	CC="diet gcc" \
-	LD="diet ld"
-%make
-popd
-%endif
-
 %if %{with uclibc}
 mkdir -p uclibc
 pushd uclibc
@@ -148,7 +126,6 @@ pushd uclibc
 		--with-zlib \
 		--with-rootlibdir=%{uclibc_root}/%{_lib} \
 		--bindir=%{uclibc_root}/bin \
-		--enable-static \
 		--enable-shared \
 		--enable-tools
 %make V=1
@@ -166,7 +143,6 @@ pushd glibc
 	--with-rootlibdir=/%{_lib} \
 	--bindir=/bin \
 	--enable-shared \
-	--enable-static \
 	--enable-gtk-doc \
 	--enable-gtk-doc-html \
 	--with-html-dir=%{_docdir}/%{name}/html
@@ -186,11 +162,6 @@ for i in depmod insmod lsmod modinfo modprobe rmmod; do
 	ln -sr %{buildroot}%{uclibc_root}/bin/kmod %{buildroot}%{uclibc_root}/sbin/$i
 done;
 
-%endif
-
-%if %{with dietlibc}
-install -m644 ./diet/libkmod/.libs/libkmod.a -D %{buildroot}%{_prefix}/lib/dietlibc/lib-%{_arch}/libkmod.a
-#%makeinstall_std -C diet
 %endif
 
 %makeinstall_std -C glibc
@@ -246,12 +217,7 @@ make -C glibc check
 %{_includedir}/*
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libkmod.so
-%{_libdir}/libkmod.a
-%if %{with dietlibc}
-%{_prefix}/lib/dietlibc/lib-%{_arch}/libkmod.a
-%endif
 %if %{with uclibc}
-%{uclibc_root}%{_libdir}/libkmod.a
 %{uclibc_root}%{_libdir}/libkmod.so
 %endif
 
