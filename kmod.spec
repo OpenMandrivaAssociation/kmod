@@ -11,8 +11,8 @@
 
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
-Version:	13
-Release:	3
+Version:	14
+Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://www.politreco.com/2011/12/announce-kmod-2/
@@ -25,6 +25,7 @@ Source3:	modprobe.preload
 Source4:	blacklist-mdv.conf
 Source5:	ipw-no-associate.conf
 Source6:	blacklist-compat.conf
+Patch0:		kmod-14-allow-static.patch
 
 %if %{with dietlibc}
 BuildRequires:	dietlibc-devel
@@ -104,6 +105,10 @@ list modules, also checking its properties, dependencies and aliases.
 
 %prep
 %setup -q
+%apply_patches
+aclocal -I m4
+automake -a
+autoconf
 
 %build
 %global optflags %{optflags} -Os
