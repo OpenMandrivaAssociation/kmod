@@ -12,10 +12,10 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	14
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
-Url:		http://www.politreco.com/2011/12/announce-kmod-2/
+Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
 # See also: http://packages.profusion.mobi/kmod/
 Source0:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.xz
 Source1:	http://ftp.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.sign
