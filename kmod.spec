@@ -11,8 +11,8 @@
 
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
-Version:	14
-Release:	2
+Version:	15
+Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -210,6 +210,7 @@ make -C glibc check
 
 %files
 /bin/kmod
+%{_datadir}/bash-completion/completions/kmod
 %{_mandir}/man5/*
 %{_mandir}/man8/*
 
