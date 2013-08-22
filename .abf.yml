@@ -1,6 +1,5 @@
+---
 removed_sources:
   kmod-13.tar.xz: c9be3f82e10bd26e4b29daa74b447f23ef202a47
 sources:
-  kmod-13.tar.sign: 8cc64146a56bd7cec87ef4db19e452727e0b9637
-  kmod-14.tar.sign: a0307bb924b3e810d5a7700663a411763991fa94
-  kmod-14.tar.xz: a9fa2993369a285f45aef11a8a2b56e7c57a56b1
+  kmod-15.tar.xz: 0c191c02803eb2a935197211c6c546d2c7c374dc
