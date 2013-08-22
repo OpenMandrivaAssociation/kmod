@@ -210,6 +210,7 @@ make -C glibc check
 
 %files
 /bin/kmod
+%{_datadir}/bash-completion/completions/kmod
 %{_mandir}/man5/*
 %{_mandir}/man8/*
 
