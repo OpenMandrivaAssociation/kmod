@@ -1,5 +1,2 @@
-removed_sources:
-  kmod-16.tar.xz: 1b3e8066208098b3b9593b63bff5838a41bbdfb0
 sources:
-  kmod-17.tar.sign: cacca69213a07c12825d0c274ccd98f72b958b2e
-  kmod-17.tar.xz: d283d2a1b4bd4b630df82e706b53f969f1c13a7b
+  kmod-18.tar.xz: 6cadc3b088fa5874f712d3bbe4df75ece59c4b77
