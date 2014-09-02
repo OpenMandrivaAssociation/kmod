@@ -11,7 +11,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	18
-Release:	4
+Release:	5
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -36,6 +36,10 @@ BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(gobject-2.0)
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
+Obsoletes:	module-init-tools < %{module_ver}
+Provides:	module-init-tools = %{module_ver}
+Conflicts:	kmod-compat < 18-5
+%rename		kmod-compat
 
 %description
 kmod is a set of tools to handle common tasks with Linux kernel
@@ -46,26 +50,11 @@ These tools are designed on top of libkmod, a library that is shipped
 with kmod. The aim is to be compatible with tools, configurations and
 indexes from module-init-tools project.
 
-%package compat
-Summary:	Compat symlinks for kernel module utilities
-License:	GPLv2+
-Group:		System/Kernel and hardware
-Obsoletes:	module-init-tools < %{module_ver}
-Provides:	module-init-tools = %{module_ver}
-Requires:	%{name} = %{EVRD}
-
-%description compat
-kmod is a set of tools to handle common tasks with Linux kernel
-modules like insert, remove, list, check properties, resolve
-dependencies and aliases.
-
-This package contains traditional name symlinks (lsmod, etc.)
-
 %package -n %{libname}
 Summary:	Library to interact with Linux kernel modules
 License:	LGPLv2.1+
 Group:		System/Libraries
-Requires:	%{name}-compat = %{EVRD}
+Requires:	%{name} = %{EVRD}
 Conflicts:	%{mklibname modprobe 0} <= 3.6-18
 Conflicts:	%{mklibname modprobe 1} < %{module_ver}
 
@@ -102,7 +91,7 @@ Summary:	Development files for libkmod
 Group:		Development/C
 License:	LGPLv2.1+
 Requires:	%{libname} = %{EVRD}
-Requires:	%{name}-compat = %{EVRD}
+Requires:	%{name} = %{EVRD}
 %if %{with uclibc}
 Requires:	uclibc-%{libname} = %{EVRD}
 %endif
@@ -198,8 +187,15 @@ done;
 [ ! -d glibc/testsuite ] && cp -a testsuite glibc
 make -C glibc check
 
-
 %files
+%dir %{_sysconfdir}/modprobe.d
+%dir %{_sysconfdir}/depmod.d
+%dir /lib/modprobe.d
+%config(noreplace) %{_sysconfdir}/modprobe.preload
+%config(noreplace) %{_sysconfdir}/modprobe.conf
+%config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
+/bin/lsmod
+/sbin/*
 /bin/kmod
 %{_datadir}/bash-completion/completions/kmod
 %{_mandir}/man5/*
@@ -225,13 +221,3 @@ make -C glibc check
 %if %{with uclibc}
 %{uclibc_root}%{_libdir}/libkmod.so
 %endif
-
-%files compat
-%dir %{_sysconfdir}/modprobe.d
-%dir %{_sysconfdir}/depmod.d
-%dir /lib/modprobe.d
-%config(noreplace) %{_sysconfdir}/modprobe.preload
-%config(noreplace) %{_sysconfdir}/modprobe.conf
-%config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
-/bin/lsmod
-/sbin/*
