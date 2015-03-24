@@ -139,13 +139,3 @@ install eth0 /bin/true
 install net-pf-3 /bin/true
 install ov518_decomp { /sbin/modprobe ov511; }; /sbin/modprobe --first-time --ignore-install ov518_decomp
 remove ov518_decomp /sbin/modprobe -r --first-time --ignore-remove ov518_decomp && { /sbin/modprobe -r ov511; /bin/true; }
-
-# (oe) required for nfsv4 if nfs-utils-1.0.7-1mdk is compiled with nfsv4 support
-install nfsd /sbin/modprobe --first-time --ignore-install nfsd && { /bin/mount -t nfsd nfsd /proc/fs/nfsd > /dev/null 2>&1 || :; }
-install sunrpc /sbin/modprobe --first-time --ignore-install sunrpc && { /bin/mount -t rpc_pipefs sunrpc /var/lib/nfs/rpc_pipefs > /dev/null 2>&1 || :; }
-remove sunrpc { /bin/umount /var/lib/nfs/rpc_pipefs > /dev/null 2>&1 || :; } ; /sbin/modprobe -r --ignore-remove sunrpc
-remove nfsd { /bin/umount /proc/fs/nfsd > /dev/null 2>&1 || :; } ; /sbin/modprobe -r --first-time --ignore-remove nfsd
-alias nfs4 nfs
-alias rpc_pipefs sunrpc
-alias rpc_svc_gss_pipefs sunrpc
-
