@@ -36,6 +36,9 @@ BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(gobject-2.0)
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
+# (tpg) needed for checks
+BuildRequires:	git
+BuildRequires:	kernel-devel
 Obsoletes:	module-init-tools < %{module_ver}
 Provides:	module-init-tools = %{module_ver}
 Conflicts:	kmod-compat < 18-5
@@ -121,7 +124,8 @@ pushd uclibc
 	--bindir=%{uclibc_root}/bin \
 	--enable-shared \
 	--enable-tools
-%make V=1
+
+%make
 popd
 %endif
 
@@ -139,6 +143,7 @@ pushd glibc
 	--enable-gtk-doc \
 	--enable-gtk-doc-html \
 	--with-html-dir=%{_docdir}/%{name}/html
+
 %make
 popd
 
