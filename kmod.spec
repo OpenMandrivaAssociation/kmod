@@ -25,7 +25,7 @@ Source4:	blacklist-mdv.conf
 Source5:	ipw-no-associate.conf
 Source6:	blacklist-compat.conf
 Source7:	usb.conf
-Patch0:		kmod-14-allow-static.patch
+Patch0:		kmod-21-allow-static.patch
 
 %if %{with uclibc}
 BuildRequires:	uClibc-devel >= 0.9.33.2-15
