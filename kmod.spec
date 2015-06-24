@@ -97,7 +97,7 @@ Requires:	uclibc-%{libname} = %{EVRD}
 Provides:	uclibc-%{name}-devel = %{EVRD}
 Conflicts:	%{devname} < 21-2
 
-%description -n	%{devname}
+%description -n	uclibc-%{devname}
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 %endif
