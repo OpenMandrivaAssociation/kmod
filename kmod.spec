@@ -30,7 +30,7 @@ Patch0:		kmod-21-allow-static.patch
 %if %{with uclibc}
 BuildRequires:	uClibc-devel >= 0.9.33.2-15
 BuildRequires:	uclibc-zlib-devel
-BuildRequires:	uclibc-xz-devel
+BuildRequires:	uclibc-lzma-devel
 %endif
 BuildRequires:	gtk-doc
 BuildRequires:	xsltproc
