@@ -11,7 +11,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	21
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -25,10 +25,13 @@ Source4:	blacklist-mdv.conf
 Source5:	ipw-no-associate.conf
 Source6:	blacklist-compat.conf
 Source7:	usb.conf
+Source8:	%{name}.rpmlintrc
 Patch0:		kmod-21-allow-static.patch
 
 %if %{with uclibc}
 BuildRequires:	uClibc-devel >= 0.9.33.2-15
+BuildRequires:	uclibc-zlib-devel
+BuildRequires:	uclibc-xz-devel
 %endif
 BuildRequires:	gtk-doc
 BuildRequires:	xsltproc
@@ -84,6 +87,20 @@ Group:		System/Libraries
 %description -n	uclibc-%{libname}
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
+
+%package -n uclibc-%{devname}
+Summary:	Development files for libkmod
+Group:		Development/C
+License:	LGPLv2.1+
+Requires:	%{devname} = %{EVRD}
+Requires:	uclibc-%{name} = %{EVRD}
+Requires:	uclibc-%{libname} = %{EVRD}
+Provides:	uclibc-%{name}-devel = %{EVRD}
+Conflicts:	%{devname} < 21-2
+
+%description -n	%{devname}
+libkmod was created to allow programs to easily insert, remove and
+list modules, also checking its properties, dependencies and aliases.
 %endif
 
 %package -n %{devname}
@@ -92,9 +109,6 @@ Group:		Development/C
 License:	LGPLv2.1+
 Requires:	%{libname} = %{EVRD}
 Requires:	%{name} = %{EVRD}
-%if %{with uclibc}
-Requires:	uclibc-%{libname} = %{EVRD}
-%endif
 Provides:	%{name}-devel = %{EVRD}
 
 %description -n	%{devname}
@@ -213,6 +227,9 @@ done;
 
 %files -n uclibc-%{libname}
 %{uclibc_root}/%{_lib}/libkmod.so.%{major}*
+
+%files -n uclibc-%{devname}
+%{uclibc_root}%{_libdir}/libkmod.so
 %endif
 
 %files -n %{devname}
@@ -220,6 +237,3 @@ done;
 %{_includedir}/*
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libkmod.so
-%if %{with uclibc}
-%{uclibc_root}%{_libdir}/libkmod.so
-%endif
