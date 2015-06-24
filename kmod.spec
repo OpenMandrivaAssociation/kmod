@@ -17,7 +17,7 @@ Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
 # See also: http://packages.profusion.mobi/kmod/
 Source0:	https://www.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.xz
-Source1:	https://www.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.sign
+Source1:	%{name}.rpmlintrc
 # (tpg) provide config files from module-init-tools
 Source2:	modprobe.default
 Source3:	modprobe.preload
@@ -25,7 +25,6 @@ Source4:	blacklist-mdv.conf
 Source5:	ipw-no-associate.conf
 Source6:	blacklist-compat.conf
 Source7:	usb.conf
-Source8:	%{name}.rpmlintrc
 Patch0:		kmod-21-allow-static.patch
 
 %if %{with uclibc}
