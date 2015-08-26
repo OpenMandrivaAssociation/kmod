@@ -6,12 +6,12 @@
 # keep this synchronized with module-init-tools-ver-rel+1
 %define module_ver 3.17-1
 
-%bcond_without uclibc
+%bcond_with uclibc
 
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	21
-Release:	3
+Release:	4
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
