@@ -9,7 +9,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	24
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -89,7 +89,7 @@ autoconf
 	--enable-gtk-doc-html \
 	--with-html-dir=%{_docdir}/%{name}/html
 
-%make
+%make LIBS=-lpthread
 
 %install
 %makeinstall_std
