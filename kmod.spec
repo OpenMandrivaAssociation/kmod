@@ -9,7 +9,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	25
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -110,6 +110,7 @@ touch %{buildroot}%{_sysconfdir}/modprobe.conf
 
 # (tpg) we still use this
 ln -s ../modprobe.conf %{buildroot}%{_sysconfdir}/modprobe.d/01_mandriva.conf
+ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/libkmod.h
 
 # kmod-compat
 mkdir -p %{buildroot}/{bin,sbin}
