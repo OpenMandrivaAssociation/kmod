@@ -1,0 +1,135 @@
+diff -Naur kmod-25/config.h.in kmod-25.tpg/config.h.in
+--- kmod-25/config.h.in	2018-01-09 01:31:04.754604548 +0000
++++ kmod-25.tpg/config.h.in	2018-05-06 21:32:52.021721560 +0000
+@@ -15,6 +15,9 @@
+ /* Enable zlib for modules. */
+ #undef ENABLE_ZLIB
+ 
++/* Enable zstd for modules. */
++#undef ENABLE_ZSTD
++
+ /* Define to 1 if you have the declaration of `be32toh', and to 0 if you
+    don't. */
+ #undef HAVE_DECL_BE32TOH
+diff -Naur kmod-25/configure.ac kmod-25.tpg/configure.ac
+--- kmod-25/configure.ac	2018-01-08 21:51:04.474175877 +0000
++++ kmod-25.tpg/configure.ac	2018-05-06 21:32:19.263660072 +0000
+@@ -106,6 +106,17 @@
+ ])
+ CC_FEATURE_APPEND([with_features], [with_zlib], [ZLIB])
+ 
++AC_ARG_WITH([zstd],
++	AS_HELP_STRING([--with-zstd], [handle zstd modules @<:@default=disabled@:>@]),
++	[], [with_zstd=no])
++AS_IF([test "x$with_zstd" != "xno"], [
++	PKG_CHECK_MODULES([zstd], [zstd])
++	AC_DEFINE([ENABLE_ZSTD], [1], [Enable zstd for modules.])
++], [
++	AC_MSG_NOTICE([zstd support not requested])
++])
++CC_FEATURE_APPEND([with_features], [with_zstd], [ZSTD])
++
+ AC_ARG_WITH([bashcompletiondir],
+ 	AS_HELP_STRING([--with-bashcompletiondir=DIR], [Bash completions directory]),
+ 	[],
+@@ -297,7 +308,7 @@
+ 	tools:			${enable_tools}
+ 	python bindings:	${enable_python}
+ 	logging:		${enable_logging}
+-	compression:		xz=${with_xz}  zlib=${with_zlib}
++	compression:		xz=${with_xz}  zlib=${with_zlib} zstd=${with_zstd}
+ 	debug:			${enable_debug}
+ 	coverage:		${enable_coverage}
+ 	doc:			${enable_gtk_doc}
+diff -Naur kmod-25/libkmod/libkmod-file.c kmod-25.tpg/libkmod/libkmod-file.c
+--- kmod-25/libkmod/libkmod-file.c	2017-12-07 22:05:47.868772538 +0000
++++ kmod-25.tpg/libkmod/libkmod-file.c	2018-05-06 21:49:26.726404172 +0000
+@@ -32,6 +32,9 @@
+ #ifdef ENABLE_ZLIB
+ #include <zlib.h>
+ #endif
++#ifdef ENABLE_ZSTD
++#include <zstd.h>
++#endif
+ 
+ #include <shared/util.h>
+ 
+@@ -48,6 +51,9 @@
+ #ifdef ENABLE_XZ
+ 	bool xz_used;
+ #endif
++#ifdef ENABLE_ZSTD
++	bool zstd_used;
++#endif
+ #ifdef ENABLE_ZLIB
+ 	gzFile gzf;
+ #endif
+@@ -169,6 +175,32 @@
+ static const char magic_xz[] = {0xfd, '7', 'z', 'X', 'Z', 0};
+ #endif
+ 
++#ifdef ENABLE_ZSTD
++static void zstd_uncompress_belch(struct kmod_file *file)
++{
++/* write ZSTD stuff here */
++}
++
++static int zstd_uncompress(struct kmod_file *file)
++{
++/* write ZSTD stuff here */
++}
++
++static int load_zstd(struct kmod_file *file)
++{
++/* write ZSTD stuff here */
++}
++
++static void unload_zstd(struct kmod_file *file)
++{
++	if (!file->zstd_used)
++		return;
++	free(file->memory);
++}
++
++static const char magic_zstd[] = {/* write ZSTD stuff here */};
++#endif
++
+ #ifdef ENABLE_ZLIB
+ #define READ_STEP (4 * 1024 * 1024)
+ static int load_zlib(struct kmod_file *file)
+@@ -244,6 +276,9 @@
+ #ifdef ENABLE_ZLIB
+ 	{sizeof(magic_zlib), magic_zlib, {load_zlib, unload_zlib}},
+ #endif
++#ifdef ENABLE_ZSTD
++	{sizeof(magic_zstd), magic_zstd, {load_zstd, unload_zstd}},
++#endif
+ 	{0, NULL, {NULL, NULL}}
+ };
+ 
+diff -Naur kmod-25/shared/util.c kmod-25.tpg/shared/util.c
+--- kmod-25/shared/util.c	2017-12-07 22:05:47.877772578 +0000
++++ kmod-25.tpg/shared/util.c	2018-05-06 21:33:59.377845973 +0000
+@@ -46,6 +46,9 @@
+ #ifdef ENABLE_XZ
+ 	{".ko.xz", sizeof(".ko.xz") - 1},
+ #endif
++#ifdef ENABLE_ZSTD
++	{".ko.zst", sizeof(".ko.zst") - 1},
++#endif
+ 	{ }
+ };
+ 
+diff -Naur kmod-25/testsuite/test-util.c kmod-25.tpg/testsuite/test-util.c
+--- kmod-25/testsuite/test-util.c	2017-12-07 22:05:47.901772684 +0000
++++ kmod-25.tpg/testsuite/test-util.c	2018-05-06 21:34:46.688931876 +0000
+@@ -157,6 +157,9 @@
+ #ifdef ENABLE_XZ
+ 		{ "/bla.ko.xz", true },
+ #endif
++#ifdef ENABLE_ZSTD
++		{ "/bla.ko.zst", true },
++#endif
+ 		{ "/bla.ko.x", false },
+ 		{ "/bla.ko.", false },
+ 		{ "/bla.koz", false },
