@@ -115,7 +115,6 @@ ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/l
 # kmod-compat
 mkdir -p %{buildroot}/{bin,sbin}
 ln -s kmod %{buildroot}/bin/lsmod
-ln -s kmod %{buildroot}/sbin/lsmod
 for i in depmod insmod lsmod modinfo modprobe rmmod; do
     ln -s /bin/kmod %{buildroot}/sbin/$i
 done;
@@ -133,7 +132,6 @@ done;
 %config(noreplace) %{_sysconfdir}/modprobe.conf
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 /bin/lsmod
-/sbin/lsmod
 /sbin/*
 /bin/kmod
 %{_datadir}/bash-completion/completions/kmod
