@@ -9,7 +9,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	25
-Release:	3
+Release:	4
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -53,7 +53,7 @@ Requires:	%{name} = %{EVRD}
 Conflicts:	%{mklibname modprobe 0} <= 3.6-18
 Conflicts:	%{mklibname modprobe 1} < %{module_ver}
 
-%description -n	%{libname}
+%description -n %{libname}
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 
@@ -65,13 +65,12 @@ Requires:	%{libname} = %{EVRD}
 Requires:	%{name} = %{EVRD}
 Provides:	%{name}-devel = %{EVRD}
 
-%description -n	%{devname}
+%description -n %{devname}
 libkmod was created to allow programs to easily insert, remove and
 list modules, also checking its properties, dependencies and aliases.
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p1
 aclocal -I m4
 automake -a
 autoconf
@@ -90,10 +89,10 @@ autoconf
 	--enable-gtk-doc-html \
 	--with-html-dir=%{_docdir}/%{name}/html
 
-%make LIBS=-lpthread
+%make_build LIBS=-lpthread
 
 %install
-%makeinstall_std
+%make_install
 
 # Remove standalone tools
 rm -f %{buildroot}/bin/kmod-*
@@ -116,6 +115,7 @@ ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/l
 # kmod-compat
 mkdir -p %{buildroot}/{bin,sbin}
 ln -s kmod %{buildroot}/bin/lsmod
+ln -s kmod %{buildroot}/sbin/lsmod
 for i in depmod insmod lsmod modinfo modprobe rmmod; do
     ln -s /bin/kmod %{buildroot}/sbin/$i
 done;
@@ -133,6 +133,7 @@ done;
 %config(noreplace) %{_sysconfdir}/modprobe.conf
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 /bin/lsmod
+/sbin/lsmod
 /sbin/*
 /bin/kmod
 %{_datadir}/bash-completion/completions/kmod
