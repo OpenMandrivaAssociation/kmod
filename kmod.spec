@@ -8,8 +8,8 @@
 
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
-Version:	25
-Release:	5
+Version:	26
+Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -24,7 +24,6 @@ Source5:	ipw-no-associate.conf
 Source6:	blacklist-compat.conf
 Source7:	usb.conf
 Patch0:		kmod-21-allow-static.patch
-Patch1:		kmod-25-libkmod.h-buildfix.patch
 BuildRequires:	gtk-doc
 BuildRequires:	xsltproc
 BuildRequires:	pkgconfig(glib-2.0)
