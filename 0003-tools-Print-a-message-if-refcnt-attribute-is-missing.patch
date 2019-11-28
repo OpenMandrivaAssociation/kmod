@@ -1,0 +1,80 @@
+From ea3e508f61251b16567f888042f6c4c60b48a4e0 Mon Sep 17 00:00:00 2001
+From: Ezequiel Garcia <ezequiel@collabora.com>
+Date: Fri, 8 Mar 2019 17:39:07 -0300
+Subject: [PATCH 03/10] tools: Print a message if refcnt attribute is missing
+
+Currently, check_module_inuse returns a wrong user message
+if the kernel is built without module unloading support.
+
+Fix it by returning a more specific error, in case 'refcnt'
+attribute is missing.
+---
+ tools/remove.c | 9 ++++++---
+ tools/rmmod.c  | 9 ++++++---
+ 2 files changed, 12 insertions(+), 6 deletions(-)
+
+diff --git a/tools/remove.c b/tools/remove.c
+index 07e2cc0..387ef0e 100644
+--- a/tools/remove.c
++++ b/tools/remove.c
+@@ -44,7 +44,7 @@ static void help(void)
+ 
+ static int check_module_inuse(struct kmod_module *mod) {
+ 	struct kmod_list *holders;
+-	int state;
++	int state, ret;
+ 
+ 	state = kmod_module_get_initstate(mod);
+ 
+@@ -74,12 +74,15 @@ static int check_module_inuse(struct kmod_module *mod) {
+ 		return -EBUSY;
+ 	}
+ 
+-	if (kmod_module_get_refcnt(mod) != 0) {
++	ret = kmod_module_get_refcnt(mod);
++	if (ret > 0) {
+ 		ERR("Module %s is in use\n", kmod_module_get_name(mod));
+ 		return -EBUSY;
++	} else if (ret == -ENOENT) {
++		ERR("Module unloading is not supported\n");
+ 	}
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int do_remove(int argc, char *argv[])
+diff --git a/tools/rmmod.c b/tools/rmmod.c
+index bcdea4c..3942e7b 100644
+--- a/tools/rmmod.c
++++ b/tools/rmmod.c
+@@ -63,7 +63,7 @@ static void help(void)
+ 
+ static int check_module_inuse(struct kmod_module *mod) {
+ 	struct kmod_list *holders;
+-	int state;
++	int state, ret;
+ 
+ 	state = kmod_module_get_initstate(mod);
+ 
+@@ -93,12 +93,15 @@ static int check_module_inuse(struct kmod_module *mod) {
+ 		return -EBUSY;
+ 	}
+ 
+-	if (kmod_module_get_refcnt(mod) != 0) {
++	ret = kmod_module_get_refcnt(mod);
++	if (ret > 0) {
+ 		ERR("Module %s is in use\n", kmod_module_get_name(mod));
+ 		return -EBUSY;
++	} else if (ret == -ENOENT) {
++		ERR("Module unloading is not supported\n");
+ 	}
+ 
+-	return 0;
++	return ret;
+ }
+ 
+ static int do_rmmod(int argc, char *argv[])
+-- 
+2.24.0
+

@@ -6,10 +6,13 @@
 # keep this synchronized with module-init-tools-ver-rel+1
 %define module_ver 3.17-1
 
+# (tpg) reduce size a little bit
+%global optflags %{optflags} -Oz
+
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	26
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -24,6 +27,15 @@ Source5:	ipw-no-associate.conf
 Source6:	blacklist-compat.conf
 Source7:	usb.conf
 Patch0:		kmod-21-allow-static.patch
+# (tpg) patches from upstream git
+Patch100:	0001-Link-against-libcrypto-not-all-of-openssl.patch
+Patch101:	0002-build-Stop-using-dolt.patch
+Patch102:	0003-tools-Print-a-message-if-refcnt-attribute-is-missing.patch
+Patch103:	0004-libkmod-signature-use-PKCS-7-instead-of-CMS.patch
+Patch104:	0005-Do-not-check-for-undefined-symbols-when-building-the.patch
+Patch105:	0006-modprobe-ignore-builtin-module-on-recursive-removing.patch
+Patch106:	0009-modprobe-use-flags-rather-than-bool-args.patch
+Patch107:	0010-Makefile.am-filter-Wl-no-undefined.patch
 BuildRequires:	gtk-doc
 BuildRequires:	xsltproc
 BuildRequires:	pkgconfig(glib-2.0)
