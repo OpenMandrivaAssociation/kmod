@@ -1,9 +1,9 @@
-diff -Naur kmod-21/configure.ac kmod-21.tpg/configure.ac
---- kmod-21/configure.ac	2015-06-09 04:24:19.000000000 +0000
-+++ kmod-21.tpg/configure.ac	2015-06-10 19:05:12.215613979 +0000
-@@ -19,7 +19,7 @@
+diff -Naur kmod-26/configure.ac kmod-26.tpg/configure.ac
+--- kmod-26/configure.ac	2019-11-28 11:55:53.595047847 +0000
++++ kmod-26.tpg/configure.ac	2019-11-28 11:56:37.741048101 +0000
+@@ -18,7 +18,7 @@
+ AM_SILENT_RULES([yes])
  LT_INIT([disable-static pic-only])
- DOLT
  
 -AS_IF([test "x$enable_static" = "xyes"], [AC_MSG_ERROR([--enable-static is not supported by kmod])])
 +dnl AS_IF([test "x$enable_static" = "xyes"], [AC_MSG_ERROR([--enable-static is not supported by kmod])])
