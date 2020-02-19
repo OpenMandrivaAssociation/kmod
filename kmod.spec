@@ -26,17 +26,8 @@ Source4:	blacklist-mdv.conf
 Source5:	ipw-no-associate.conf
 Source6:	blacklist-compat.conf
 Source7:	usb.conf
-# (tpg) patches from upstream git
-Patch100:	0001-Link-against-libcrypto-not-all-of-openssl.patch
-Patch101:	0002-build-Stop-using-dolt.patch
-Patch102:	0003-tools-Print-a-message-if-refcnt-attribute-is-missing.patch
-Patch103:	0004-libkmod-signature-use-PKCS-7-instead-of-CMS.patch
-Patch104:	0005-Do-not-check-for-undefined-symbols-when-building-the.patch
-Patch105:	0006-modprobe-ignore-builtin-module-on-recursive-removing.patch
-Patch106:	0009-modprobe-use-flags-rather-than-bool-args.patch
-Patch107:	0010-Makefile.am-filter-Wl-no-undefined.patch
+Patch999:	kmod-21-allow-static.patch
 
-Patch999:		kmod-21-allow-static.patch
 BuildRequires:	gtk-doc
 BuildRequires:	xsltproc
 BuildRequires:	pkgconfig(glib-2.0)
