@@ -90,7 +90,7 @@ autoconf
 	--bindir=/bin \
 	--enable-shared \
 	--enable-gtk-doc \
-	--enable-gtk-doc-html \
+	--disable-gtk-doc-html \
 	--with-html-dir=%{_docdir}/%{name}/html
 
 %make_build LIBS=-lpthread
@@ -146,7 +146,6 @@ done;
 /%{_lib}/libkmod.so.%{major}*
 
 %files -n %{devname}
-%doc %{_docdir}/%{name}
 %{_includedir}/*
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libkmod.so
