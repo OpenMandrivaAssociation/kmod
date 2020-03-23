@@ -12,7 +12,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	27
-Release:	2
+Release:	3
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -24,8 +24,9 @@ Source2:	modprobe.default
 Source3:	modprobe.preload
 Source4:	blacklist-mdv.conf
 Source5:	ipw-no-associate.conf
-Source6:	blacklist-compat.conf
-Source7:	usb.conf
+Source6:	usb.conf
+# (tpg) add support for Zstandard compressed kernel modules
+Patch100:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kmod/zstd-support.patch
 Patch999:	kmod-21-allow-static.patch
 
 BuildRequires:	gtk-doc
@@ -34,10 +35,12 @@ BuildRequires:	pkgconfig(glib-2.0)
 BuildRequires:	pkgconfig(gobject-2.0)
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
+BuildRequires:	pkgconfig(libzstd)
 Obsoletes:	module-init-tools < %{module_ver}
 Provides:	module-init-tools = %{module_ver}
 Conflicts:	kmod-compat < 18-5
 %rename		kmod-compat
+Recommends:	hwdata
 
 %description
 kmod is a set of tools to handle common tasks with Linux kernel
@@ -83,6 +86,7 @@ autoconf
 # The extra --includedir gives us the possibility to detect dependent
 # packages which fail to properly use pkgconfig.
 %configure \
+	--with-zstd \
 	--with-xz \
 	--with-zlib \
 	--includedir=%{_includedir}/%{name}-%{version} \
@@ -106,10 +110,9 @@ rm -f %{buildroot}%{_libdir}/libkmod.la
 install -d -m755 %{buildroot}%{_sysconfdir}
 install -d -m755 %{buildroot}%{_sysconfdir}/depmod.d
 install -d -m755 %{buildroot}%{_sysconfdir}/modprobe.d
-install -d -m755 %{buildroot}/lib/modprobe.d
 install -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/modprobe.d/00_modprobe.conf
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}
-install -m 644 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{SOURCE7} %{buildroot}%{_sysconfdir}/modprobe.d
+install -m 644 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_sysconfdir}/modprobe.d
 touch %{buildroot}%{_sysconfdir}/modprobe.conf
 
 # (tpg) we still use this
@@ -131,7 +134,6 @@ done;
 %files
 %dir %{_sysconfdir}/modprobe.d
 %dir %{_sysconfdir}/depmod.d
-%dir /lib/modprobe.d
 %config(noreplace) %{_sysconfdir}/modprobe.preload
 %config(noreplace) %{_sysconfdir}/modprobe.conf
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
