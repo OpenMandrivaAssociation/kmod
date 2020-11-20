@@ -12,7 +12,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	27
-Release:	3
+Release:	4
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -26,7 +26,9 @@ Source4:	blacklist-mdv.conf
 Source5:	ipw-no-associate.conf
 Source6:	usb.conf
 # (tpg) add support for Zstandard compressed kernel modules
-Patch100:	https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kmod/zstd-support.patch
+# original patch https://gitweb.frugalware.org/frugalware-current/raw/master/source/base/kmod/zstd-support.patch
+# merged patch into upstream
+Patch100:	0000-add-Zstandard-compression-support.patch
 Patch999:	kmod-21-allow-static.patch
 
 BuildRequires:	gtk-doc
