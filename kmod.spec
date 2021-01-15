@@ -12,7 +12,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	27
-Release:	4
+Release:	5
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -112,9 +112,11 @@ rm -f %{buildroot}%{_libdir}/libkmod.la
 install -d -m755 %{buildroot}%{_sysconfdir}
 install -d -m755 %{buildroot}%{_sysconfdir}/depmod.d
 install -d -m755 %{buildroot}%{_sysconfdir}/modprobe.d
+install -d -m755 %{buildroot}/lib/modprobe.d
 install -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/modprobe.d/00_modprobe.conf
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}
 install -m 644 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_sysconfdir}/modprobe.d
+install -m 644 %{SOURCE6} %{buildroot}/lib/modprobe.d
 touch %{buildroot}%{_sysconfdir}/modprobe.conf
 
 # (tpg) we still use this
@@ -139,6 +141,7 @@ done;
 %config(noreplace) %{_sysconfdir}/modprobe.preload
 %config(noreplace) %{_sysconfdir}/modprobe.conf
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
+%config(noreplace) /lib/modprobe.d/*.conf
 /bin/lsmod
 /sbin/*
 /bin/kmod
