@@ -12,7 +12,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	28
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -22,7 +22,7 @@ Source1:	%{name}.rpmlintrc
 # (tpg) provide config files from module-init-tools
 Source2:	modprobe.default
 Source3:	modprobe.preload
-Source4:	blacklist-mdv.conf
+Source4:	blacklist-omv.conf
 Source5:	ipw-no-associate.conf
 Source6:	usb.conf
 Patch999:	kmod-21-allow-static.patch
@@ -113,7 +113,6 @@ install -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/modprobe.d/00_modprobe.conf
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}
 install -m 644 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_sysconfdir}/modprobe.d
 install -m 644 %{SOURCE6} %{buildroot}/lib/modprobe.d
-touch %{buildroot}%{_sysconfdir}/modprobe.conf
 
 # (tpg) we still use this
 ln -s ../modprobe.conf %{buildroot}%{_sysconfdir}/modprobe.d/01_mandriva.conf
@@ -135,7 +134,6 @@ done;
 %dir %{_sysconfdir}/modprobe.d
 %dir %{_sysconfdir}/depmod.d
 %config(noreplace) %{_sysconfdir}/modprobe.preload
-%config(noreplace) %{_sysconfdir}/modprobe.conf
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 %config(noreplace) /lib/modprobe.d/*.conf
 /bin/lsmod
