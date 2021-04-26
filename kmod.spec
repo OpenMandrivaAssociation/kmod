@@ -75,10 +75,7 @@ list modules, also checking its properties, dependencies and aliases.
 
 %prep
 %autosetup -p1
-
-aclocal -I m4
-automake -a
-autoconf
+autoreconf -fiv
 
 %build
 # The extra --includedir gives us the possibility to detect dependent
