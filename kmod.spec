@@ -88,8 +88,6 @@ autoconf
 	--with-xz \
 	--with-zlib \
 	--includedir=%{_includedir}/%{name}-%{version} \
-	--with-rootlibdir=/%{_lib} \
-	--bindir=/bin \
 	--enable-shared \
 	--enable-gtk-doc \
 	--disable-gtk-doc-html \
@@ -122,7 +120,8 @@ ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/l
 mkdir -p %{buildroot}/{bin,sbin}
 ln -s kmod %{buildroot}/bin/lsmod
 for i in depmod insmod lsmod modinfo modprobe rmmod; do
-    ln -s /bin/kmod %{buildroot}/sbin/$i
+    ln -s /usr/bin/kmod %{buildroot}/bin/$i
+    ln -s /usr/bin/kmod %{buildroot}/sbin/$i
 done;
 
 #check
@@ -136,15 +135,15 @@ done;
 %config(noreplace) %{_sysconfdir}/modprobe.preload
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 %config(noreplace) /lib/modprobe.d/*.conf
-/bin/lsmod
+%{_bindir}/*
 /sbin/*
-/bin/kmod
+/bin/*
 %{_datadir}/bash-completion/completions/kmod
 %{_mandir}/man5/*
 %{_mandir}/man8/*
 
 %files -n %{libname}
-/%{_lib}/libkmod.so.%{major}*
+%{_libdir}/libkmod.so.%{major}*
 
 %files -n %{devname}
 %{_includedir}/*
