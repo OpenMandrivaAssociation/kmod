@@ -81,6 +81,8 @@ autoreconf -fiv
 # The extra --includedir gives us the possibility to detect dependent
 # packages which fail to properly use pkgconfig.
 %configure \
+	--bindir=/bin \
+	--sbindir=/sbin \
 	--with-zstd \
 	--with-xz \
 	--with-zlib \
@@ -114,12 +116,12 @@ ln -s ../modprobe.conf %{buildroot}%{_sysconfdir}/modprobe.d/01_mandriva.conf
 ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/libkmod.h
 
 # kmod-compat
-mkdir -p %{buildroot}/{bin,sbin}
-ln -s kmod %{buildroot}/bin/lsmod
+mkdir -p %{buildroot}/sbin
+cd %{buildroot}/bin
 for i in depmod insmod lsmod modinfo modprobe rmmod; do
-    ln -s /usr/bin/kmod %{buildroot}/bin/$i
-    ln -s /usr/bin/kmod %{buildroot}/sbin/$i
-done;
+    ln -s kmod $i
+    ln -s ../bin/kmod ../sbin/$i
+done
 
 #check
 # make check suddenly seems to fail copy this directory from srcdir...
@@ -132,7 +134,6 @@ done;
 %config(noreplace) %{_sysconfdir}/modprobe.preload
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 %config(noreplace) /lib/modprobe.d/*.conf
-%{_bindir}/*
 /sbin/*
 /bin/*
 %{_datadir}/bash-completion/completions/kmod
