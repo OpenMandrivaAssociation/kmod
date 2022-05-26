@@ -12,7 +12,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	29
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -34,6 +34,7 @@ BuildRequires:	pkgconfig(gobject-2.0)
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(libzstd)
+BuildRequires:	systemd-rpm-macros
 Obsoletes:	module-init-tools < %{module_ver}
 Provides:	module-init-tools = %{module_ver}
 Conflicts:	kmod-compat < 18-5
@@ -81,8 +82,6 @@ autoreconf -fiv
 # The extra --includedir gives us the possibility to detect dependent
 # packages which fail to properly use pkgconfig.
 %configure \
-	--bindir=/bin \
-	--sbindir=/sbin \
 	--with-zstd \
 	--with-xz \
 	--with-zlib \
@@ -97,30 +96,28 @@ autoreconf -fiv
 %install
 %make_install
 
-# Remove standalone tools
-rm -f %{buildroot}/bin/kmod-*
 rm -f %{buildroot}%{_libdir}/libkmod.la
 
 # (tpg) install config files
 install -d -m755 %{buildroot}%{_sysconfdir}
 install -d -m755 %{buildroot}%{_sysconfdir}/depmod.d
 install -d -m755 %{buildroot}%{_sysconfdir}/modprobe.d
-install -d -m755 %{buildroot}/lib/modprobe.d
+install -d -m755 %{buildroot}%{_modprobedir}
 install -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/modprobe.d/00_modprobe.conf
 install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}
 install -m 644 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_sysconfdir}/modprobe.d
-install -m 644 %{SOURCE6} %{buildroot}/lib/modprobe.d
+install -m 644 %{SOURCE6} %{buildroot}%{_modprobedir}
 
 # (tpg) we still use this
 ln -s ../modprobe.conf %{buildroot}%{_sysconfdir}/modprobe.d/01_mandriva.conf
 ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/libkmod.h
 
 # kmod-compat
-mkdir -p %{buildroot}/sbin
-cd %{buildroot}/bin
+mkdir -p %{buildroot}/{bin,sbin,%{_sbindir}}
 for i in depmod insmod lsmod modinfo modprobe rmmod; do
-    ln -s kmod $i
-    ln -s ../bin/kmod ../sbin/$i
+    ln -s %{_bindir}/kmod %{buildroot}/sbin/$i
+    ln -s %{_bindir}/kmod %{buildroot}/bin/$i
+    ln -s %{_bindir}/kmod %{buildroot}%{_sbindir}/$i
 done
 
 #check
@@ -136,9 +133,11 @@ done
 %config(noreplace) /lib/modprobe.d/*.conf
 /sbin/*
 /bin/*
+%{_bindir}/*
+%{_sbindir}/*
 %{_datadir}/bash-completion/completions/kmod
-%{_mandir}/man5/*
-%{_mandir}/man8/*
+%doc %{_mandir}/man5/*
+%doc %{_mandir}/man8/*
 
 %files -n %{libname}
 %{_libdir}/libkmod.so.%{major}*
