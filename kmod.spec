@@ -12,7 +12,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	29
-Release:	2
+Release:	3
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -112,14 +112,6 @@ install -m 644 %{SOURCE6} %{buildroot}%{_modprobedir}
 ln -s ../modprobe.conf %{buildroot}%{_sysconfdir}/modprobe.d/01_mandriva.conf
 ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/libkmod.h
 
-# kmod-compat
-mkdir -p %{buildroot}/{bin,sbin,%{_sbindir}}
-for i in depmod insmod lsmod modinfo modprobe rmmod; do
-    ln -s %{_bindir}/kmod %{buildroot}/sbin/$i
-    ln -s %{_bindir}/kmod %{buildroot}/bin/$i
-    ln -s %{_bindir}/kmod %{buildroot}%{_sbindir}/$i
-done
-
 #check
 # make check suddenly seems to fail copy this directory from srcdir...
 #[ ! -d glibc/testsuite ] && cp -a testsuite glibc
@@ -130,11 +122,8 @@ done
 %dir %{_sysconfdir}/depmod.d
 %config(noreplace) %{_sysconfdir}/modprobe.preload
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
-%config(noreplace) /lib/modprobe.d/*.conf
-/sbin/*
-/bin/*
+%config(noreplace) %{_prefix}/lib/modprobe.d/*.conf
 %{_bindir}/*
-%{_sbindir}/*
 %{_datadir}/bash-completion/completions/kmod
 %doc %{_mandir}/man5/*
 %doc %{_mandir}/man8/*
