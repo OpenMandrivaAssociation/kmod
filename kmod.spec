@@ -12,7 +12,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	29
-Release:	3
+Release:	4
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -77,6 +77,9 @@ list modules, also checking its properties, dependencies and aliases.
 %prep
 %autosetup -p1
 autoreconf -fiv
+# usrmerge...
+find . -type f |xargs \
+	sed -i -e 's,/lib/modules,%{_prefix}/lib/modules,g'
 
 %build
 # The extra --includedir gives us the possibility to detect dependent
