@@ -106,12 +106,6 @@ install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}
 install -m 644 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_sysconfdir}/modprobe.d
 install -m 644 %{SOURCE6} %{buildroot}%{_modprobedir}
 
-# (tpg) still lot of stuff hardcodes /sbin/modprobe and friends
-mkdir -p %{buildroot}%{_sbindir}
-for f in modprobe modinfo insmod rmmod depmod lsmod; do
-    ln -sf ../bin/kmod %{buildroot}%{_sbindir}/$f
-done
-
 # (tpg) we still use this
 ln -s ../modprobe.conf %{buildroot}%{_sysconfdir}/modprobe.d/01_mandriva.conf
 ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/libkmod.h
@@ -127,7 +121,6 @@ ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/l
 %config(noreplace) %{_sysconfdir}/modprobe.preload
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 %config(noreplace) %{_prefix}/lib/modprobe.d/*.conf
-%{_sbindir}/*
 %{_bindir}/*
 %{_datadir}/bash-completion/completions/kmod
 %doc %{_mandir}/man5/*
@@ -140,3 +133,32 @@ ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/l
 %{_includedir}/*
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libkmod.so
+
+%post
+# FIXME this is a temporary workaround to keep
+# /sbin/modprobe hardcodes etc. working during the
+# usrmerge transition.
+# This has to go as soon as we can be reasonably
+# sure /sbin is a symlink.
+# We can't just package the symlinks as we usually
+# would because that will wreak havoc on systems
+# where /sbin already is a symlink (owning 2 conflicting
+# files)
+if test -d /sbin -a ! -h /sbin; then
+	sln /usr/bin/kmod /sbin/kmod
+	for i in depmod insmod lsmod modinfo modprobe rmmod; do
+		sln /sbin/kmod /sbin/$i
+	done
+fi
+
+%posttrans
+# Needed here again, in case our newly placed (in %%post)
+# symlinks were removed again by uninstalling the
+# previous version of kmod
+# (which owned those files)
+if test -d /sbin -a ! -h /sbin; then
+	sln /usr/bin/kmod /sbin/kmod
+	for i in depmod insmod lsmod modinfo modprobe rmmod; do
+		sln /sbin/kmod /sbin/$i
+	done
+fi
