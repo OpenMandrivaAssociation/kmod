@@ -2,17 +2,13 @@
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname %{name} -d
 
-# (tpg) this is important
-# keep this synchronized with module-init-tools-ver-rel+1
-%define module_ver 3.17-1
-
 # (tpg) reduce size a little bit
 %global optflags %{optflags} -Oz
 
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	29
-Release:	4
+Release:	5
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -35,8 +31,7 @@ BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(libzstd)
 BuildRequires:	systemd-rpm-macros
-Obsoletes:	module-init-tools < %{module_ver}
-Provides:	module-init-tools = %{module_ver}
+Provides:	/sbin/modprobe
 Conflicts:	kmod-compat < 18-5
 %rename		kmod-compat
 Recommends:	hwdata
@@ -111,6 +106,12 @@ install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}
 install -m 644 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_sysconfdir}/modprobe.d
 install -m 644 %{SOURCE6} %{buildroot}%{_modprobedir}
 
+# (tpg) still lot of stuff hardcodes /sbin/modprobe and friends
+mkdir -p %{buildroot}%{_sbindir}
+for f in modprobe modinfo insmod rmmod depmod lsmod; do
+    ln -sf ../bin/kmod %{buildroot}%{_sbindir}/$f
+done
+
 # (tpg) we still use this
 ln -s ../modprobe.conf %{buildroot}%{_sysconfdir}/modprobe.d/01_mandriva.conf
 ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/libkmod.h
@@ -126,6 +127,7 @@ ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/l
 %config(noreplace) %{_sysconfdir}/modprobe.preload
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 %config(noreplace) %{_prefix}/lib/modprobe.d/*.conf
+%{_sbindir}/*
 %{_bindir}/*
 %{_datadir}/bash-completion/completions/kmod
 %doc %{_mandir}/man5/*
