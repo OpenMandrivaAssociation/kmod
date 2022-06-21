@@ -8,7 +8,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	29
-Release:	6
+Release:	8
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -109,6 +109,9 @@ install -m 644 %{SOURCE6} %{buildroot}%{_modprobedir}
 # (tpg) we still use this
 ln -s ../modprobe.conf %{buildroot}%{_sysconfdir}/modprobe.d/01_mandriva.conf
 ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/libkmod.h
+for i in depmod insmod lsmod modinfo modprobe rmmod; do
+	ln -s kmod %{buildroot}%{_bindir}/$i
+done
 
 #check
 # make check suddenly seems to fail copy this directory from srcdir...
