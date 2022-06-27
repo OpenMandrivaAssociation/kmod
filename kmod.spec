@@ -139,11 +139,30 @@ done
 
 %pre -p <lua>
 local s=posix.stat("/lib")
-print("/lib is a " .. s.type)
+if s then
+	print("/lib is a " .. s.type)
+else
+	print("/lib doesn't exist")
+end
 local s=posix.stat("/lib/ld-linux-aarch64.so.1")
-print("/lib/ld-linux-aarch64.so.1 is a " .. s.type)
+if s then
+	print("/lib/ld-linux-aarch64.so.1 is a " .. s.type)
+else
+	print("/lib/ld-linux-aarch64.so.1 doesn't exist")
+	posix.symlink("/usr/lib64/ld-linux-aarch64.so.1", "/lib/ld-linux-aarch64.so.1")
+	local s=posix.stat("/lib/ld-linux-aarch64.so.1")
+	if s then
+		print("FIXED, it's now a " .. s.type)
+	else
+		print("Not fixed")
+	end
+end
 local s=posix.stat("/usr/lib64/ld-linux-aarch64.so.1")
-print("/usr/lib64/ld-linux-aarch64.so.1 is a " .. s.type)
+if s then
+	print("/usr/lib64/ld-linux-aarch64.so.1 is a " .. s.type)
+else
+	print("/usr/lib64/ld-linux-aarch64.so.1 doesn't exist")
+end
 
 %post
 # FIXME this is a temporary workaround to keep
