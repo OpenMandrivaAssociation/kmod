@@ -137,6 +137,14 @@ done
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libkmod.so
 
+%pre -p <lua>
+local s=posix.stat("/lib")
+print("/lib is a " .. s.type)
+local s=posix.stat("/lib/ld-linux-aarch64.so.1")
+print("/lib/ld-linux-aarch64.so.1 is a " .. s.type)
+local s=posix.stat("/usr/lib64/ld-linux-aarch64.so.1")
+print("/usr/lib64/ld-linux-aarch64.so.1 is a " .. s.type)
+
 %post
 # FIXME this is a temporary workaround to keep
 # /sbin/modprobe hardcodes etc. working during the
