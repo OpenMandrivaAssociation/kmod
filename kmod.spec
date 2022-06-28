@@ -137,7 +137,17 @@ done
 %{_libdir}/pkgconfig/*.pc
 %{_libdir}/libkmod.so
 
+%ifarch %{aarch64}
 %pre -p <lua>
+-- FIXME
+-- This really does not belong here. But something is preventing
+-- /lib/ld-linux-aarch64.so.1 from being in the right place during
+-- post-usrmerge installations.
+-- Since kmod is the first package in a typical install that requires
+-- ld-linux-aarch64.so.1 in the right place (post script), make sure
+-- it exists here.
+-- This should be removed once we know why the symlink goes away at
+-- some point after installing glibc.
 local s=posix.stat("/lib")
 if s then
 	print("/lib is a " .. s.type)
@@ -163,6 +173,7 @@ if s then
 else
 	print("/usr/lib64/ld-linux-aarch64.so.1 doesn't exist")
 end
+%endif
 
 %post
 # FIXME this is a temporary workaround to keep
