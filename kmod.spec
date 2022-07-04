@@ -7,8 +7,8 @@
 
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
-Version:	29
-Release:	8
+Version:	30
+Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -174,32 +174,3 @@ else
 	print("/usr/lib64/ld-linux-aarch64.so.1 doesn't exist")
 end
 %endif
-
-%post
-# FIXME this is a temporary workaround to keep
-# /sbin/modprobe hardcodes etc. working during the
-# usrmerge transition.
-# This has to go as soon as we can be reasonably
-# sure /sbin is a symlink.
-# We can't just package the symlinks as we usually
-# would because that will wreak havoc on systems
-# where /sbin already is a symlink (owning 2 conflicting
-# files)
-if test -d /sbin -a ! -h /sbin; then
-	sln /usr/bin/kmod /sbin/kmod
-	for i in depmod insmod lsmod modinfo modprobe rmmod; do
-		sln /sbin/kmod /sbin/$i
-	done
-fi
-
-%posttrans
-# Needed here again, in case our newly placed (in %%post)
-# symlinks were removed again by uninstalling the
-# previous version of kmod
-# (which owned those files)
-if test -d /sbin -a ! -h /sbin; then
-	sln /usr/bin/kmod /sbin/kmod
-	for i in depmod insmod lsmod modinfo modprobe rmmod; do
-		sln /sbin/kmod /sbin/$i
-	done
-fi
