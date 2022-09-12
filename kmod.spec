@@ -8,7 +8,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	30
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -17,7 +17,6 @@ Source0:	https://www.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.t
 Source1:	%{name}.rpmlintrc
 # (tpg) provide config files from module-init-tools
 Source2:	modprobe.default
-Source3:	modprobe.preload
 Source4:	blacklist-omv.conf
 Source5:	ipw-no-associate.conf
 Source6:	usb.conf
@@ -121,7 +120,6 @@ done
 %files
 %dir %{_sysconfdir}/modprobe.d
 %dir %{_sysconfdir}/depmod.d
-%config(noreplace) %{_sysconfdir}/modprobe.preload
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 %config(noreplace) %{_prefix}/lib/modprobe.d/*.conf
 %{_bindir}/*
