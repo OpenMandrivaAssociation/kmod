@@ -101,7 +101,6 @@ install -d -m755 %{buildroot}%{_sysconfdir}/depmod.d
 install -d -m755 %{buildroot}%{_sysconfdir}/modprobe.d
 install -d -m755 %{buildroot}%{_modprobedir}
 install -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/modprobe.d/00_modprobe.conf
-install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}
 install -m 644 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_sysconfdir}/modprobe.d
 install -m 644 %{SOURCE6} %{buildroot}%{_modprobedir}
 
