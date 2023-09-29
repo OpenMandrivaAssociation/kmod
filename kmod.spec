@@ -7,8 +7,8 @@
 
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
-Version:	30
-Release:	3
+Version:	31
+Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
