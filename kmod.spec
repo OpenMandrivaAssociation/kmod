@@ -1,5 +1,6 @@
 %define major 2
-%define libname %mklibname %{name} %{major}
+%define oldlibname %mklibname %{name} 2
+%define libname %mklibname %{name}
 %define devname %mklibname %{name} -d
 
 # (tpg) reduce size a little bit
@@ -7,7 +8,7 @@
 
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
-Version:	31
+Version:	32
 Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
@@ -51,6 +52,7 @@ Group:		System/Libraries
 Requires:	%{name} = %{EVRD}
 Conflicts:	%{mklibname modprobe 0} <= 3.6-18
 Conflicts:	%{mklibname modprobe 1} < %{module_ver}
+%rename %{oldlibname}
 
 %description -n %{libname}
 libkmod was created to allow programs to easily insert, remove and
@@ -107,9 +109,6 @@ install -m 644 %{SOURCE6} %{buildroot}%{_modprobedir}
 # (tpg) we still use this
 ln -s ../modprobe.conf %{buildroot}%{_sysconfdir}/modprobe.d/01_mandriva.conf
 ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/libkmod.h
-for i in depmod insmod lsmod modinfo modprobe rmmod; do
-	ln -s kmod %{buildroot}%{_bindir}/$i
-done
 
 #check
 # make check suddenly seems to fail copy this directory from srcdir...
@@ -121,7 +120,17 @@ done
 %dir %{_sysconfdir}/depmod.d
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 %config(noreplace) %{_prefix}/lib/modprobe.d/*.conf
-%{_bindir}/*
+# Listing files manually here instead of just packaging
+# %{_bindir}/* to make sure we get a hard error if the
+# symlinks to the older names (insmod and friends)
+# ever get removed
+%{_bindir}/kmod
+%{_bindir}/depmod
+%{_bindir}/insmod
+%{_bindir}/lsmod
+%{_bindir}/modinfo
+%{_bindir}/modprobe
+%{_bindir}/rmmod
 %{_datadir}/bash-completion/completions/kmod
 %doc %{_mandir}/man5/*
 %doc %{_mandir}/man8/*

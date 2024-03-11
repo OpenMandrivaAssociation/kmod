@@ -1,7 +1,7 @@
-diff -Naur kmod-26/configure.ac kmod-26.tpg/configure.ac
---- kmod-26/configure.ac	2019-11-28 11:55:53.595047847 +0000
-+++ kmod-26.tpg/configure.ac	2019-11-28 11:56:37.741048101 +0000
-@@ -18,7 +18,7 @@
+diff -up kmod-32/configure.ac.1~ kmod-32/configure.ac
+--- kmod-32/configure.ac.1~	2024-03-11 20:29:29.988948636 +0100
++++ kmod-32/configure.ac	2024-03-11 20:31:38.754335479 +0100
+@@ -18,7 +18,7 @@ AM_INIT_AUTOMAKE([check-news foreign 1.1
  AM_SILENT_RULES([yes])
  LT_INIT([disable-static pic-only])
  
@@ -9,4 +9,4 @@ diff -Naur kmod-26/configure.ac kmod-26.tpg/configure.ac
 +dnl AS_IF([test "x$enable_static" = "xyes"], [AC_MSG_ERROR([--enable-static is not supported by kmod])])
  AS_IF([test "x$enable_largefile" = "xno"], [AC_MSG_ERROR([--disable-largefile is not supported by kmod])])
  
- #####################################################################
+ module_compressions=""
