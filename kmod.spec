@@ -9,7 +9,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	32
-Release:	1
+Release:	2
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -30,6 +30,7 @@ BuildRequires:	pkgconfig(gobject-2.0)
 BuildRequires:	pkgconfig(liblzma)
 BuildRequires:	pkgconfig(zlib)
 BuildRequires:	pkgconfig(libzstd)
+BuildRequires:	pkgconfig(openssl)
 BuildRequires:	systemd-rpm-macros
 Provides:	/sbin/modprobe
 Conflicts:	kmod-compat < 18-5
@@ -51,7 +52,6 @@ License:	LGPLv2.1+
 Group:		System/Libraries
 Requires:	%{name} = %{EVRD}
 Conflicts:	%{mklibname modprobe 0} <= 3.6-18
-Conflicts:	%{mklibname modprobe 1} < %{module_ver}
 %rename %{oldlibname}
 
 %description -n %{libname}
@@ -81,6 +81,7 @@ autoreconf -fiv
 # The extra --includedir gives us the possibility to detect dependent
 # packages which fail to properly use pkgconfig.
 %configure \
+	--with-openssl \
 	--with-zstd \
 	--with-xz \
 	--with-zlib \
@@ -121,7 +122,7 @@ ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/l
 %config(noreplace) %{_sysconfdir}/modprobe.d/*.conf
 %config(noreplace) %{_prefix}/lib/modprobe.d/*.conf
 # Listing files manually here instead of just packaging
-# %{_bindir}/* to make sure we get a hard error if the
+# {_bindir}/* to make sure we get a hard error if the
 # symlinks to the older names (insmod and friends)
 # ever get removed
 %{_bindir}/kmod
