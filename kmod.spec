@@ -9,7 +9,7 @@
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
 Version:	32
-Release:	2
+Release:	3
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -107,8 +107,6 @@ install -m 644 %{SOURCE2} %{buildroot}%{_sysconfdir}/modprobe.d/00_modprobe.conf
 install -m 644 %{SOURCE4} %{SOURCE5} %{SOURCE6} %{buildroot}%{_sysconfdir}/modprobe.d
 install -m 644 %{SOURCE6} %{buildroot}%{_modprobedir}
 
-# (tpg) we still use this
-ln -s ../modprobe.conf %{buildroot}%{_sysconfdir}/modprobe.d/01_mandriva.conf
 ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/libkmod.h
 
 #check
