@@ -8,8 +8,8 @@
 
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
-Version:	32
-Release:	3
+Version:	33
+Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
 Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
@@ -23,6 +23,7 @@ Source5:	ipw-no-associate.conf
 Source6:	usb.conf
 Patch999:	kmod-21-allow-static.patch
 
+BuildRequires:	scdoc
 BuildRequires:	gtk-doc
 BuildRequires:	xsltproc
 BuildRequires:	pkgconfig(glib-2.0)
@@ -140,6 +141,7 @@ ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/l
 %files -n %{devname}
 %{_includedir}/*
 %{_libdir}/pkgconfig/*.pc
+%{_datadir}/pkgconfig/*.pc
 %{_libdir}/libkmod.so
 
 %ifarch %{aarch64}
