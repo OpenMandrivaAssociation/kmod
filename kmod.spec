@@ -12,7 +12,7 @@ Version:	33
 Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
-Url:		http://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
+Url:		https://git.kernel.org/?p=utils/kernel/kmod/kmod.git;a=summary
 # See also: http://packages.profusion.mobi/kmod/
 Source0:	https://www.kernel.org/pub/linux/utils/kernel/kmod/%{name}-%{version}.tar.xz
 Source1:	%{name}.rpmlintrc
