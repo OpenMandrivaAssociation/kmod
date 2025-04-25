@@ -8,7 +8,7 @@
 
 Summary:	Utilities to load modules into the kernel
 Name:		kmod
-Version:	33
+Version:	34.2
 Release:	1
 License:	LGPLv2.1+ and GPLv2+
 Group:		System/Kernel and hardware
@@ -131,9 +131,11 @@ ln -sf %{_includedir}/%{name}-%{version}/libkmod.h %{buildroot}/%{_includedir}/l
 %{_bindir}/modinfo
 %{_bindir}/modprobe
 %{_bindir}/rmmod
-%{_datadir}/bash-completion/completions/kmod
 %doc %{_mandir}/man5/*
 %doc %{_mandir}/man8/*
+%{_datadir}/bash-completion/completions/*
+%{_datadir}/fish/vendor_functions.d/*
+%{_datadir}/zsh/site-functions/*
 
 %files -n %{libname}
 %{_libdir}/libkmod.so.%{major}*
