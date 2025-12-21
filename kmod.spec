@@ -23,6 +23,11 @@ Source5:	ipw-no-associate.conf
 Source6:	usb.conf
 Patch999:	kmod-21-allow-static.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	scdoc
 BuildRequires:	gtk-doc
 BuildRequires:	xsltproc
